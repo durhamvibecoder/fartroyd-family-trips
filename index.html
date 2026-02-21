@@ -7,228 +7,133 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" content="#2E6B5A">
 <link rel="manifest" href="./manifest.json">
-<title>Arran & Oban | 6-11 April 2026</title>
-<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%232E6B5A' width='100' height='100' rx='20'/><text x='50' y='72' text-anchor='middle' font-size='55' fill='white'>A</text></svg>">
+<title>Our Trips</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#F7F5F2;color:#2C2C2C;line-height:1.55;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
-.header{padding:28px 20px 14px;text-align:center}
-.header h1{font-family:Georgia,serif;font-size:28px;font-weight:400;letter-spacing:-.5px;margin-bottom:4px}
-.header .sub{font-size:14px;color:#7A7A7A;font-weight:500}
-.nav{position:sticky;top:0;z-index:100;background:#F7F5F2;border-bottom:1px solid #E8E5E0;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:10px 16px;display:flex;gap:8px}
-.nav::-webkit-scrollbar{display:none}
-.nav button{flex-shrink:0;padding:6px 14px;border-radius:20px;font-size:13px;font-weight:600;border:1px solid #E8E5E0;background:#FFF;color:#7A7A7A;cursor:pointer;white-space:nowrap;font-family:inherit;transition:all .15s}
-.nav button.active{background:#2E6B5A;color:#FFF;border-color:#2E6B5A}
-.content{padding:0 16px;max-width:540px;margin:0 auto;padding-bottom:80px}
-.day-head{padding:20px 0 12px}
-.day-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#2E6B5A;margin-bottom:2px}
-.day-title{font-family:Georgia,serif;font-size:22px;font-weight:400}
-.day-drive{font-size:13px;color:#7A7A7A;margin-top:4px}
-.card{background:#FFF;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.06);padding:16px;margin-bottom:10px}
-.card.photo{border-left:3px solid #5B6AAF}
-.card.dashed{background:#F9F8F6;border:1px dashed #E8E5E0;box-shadow:none}
-.badge{display:inline-block;font-size:12px;font-weight:700;padding:3px 10px;border-radius:6px;margin-bottom:8px}
-.badge-default{background:#E8F0ED;color:#2E6B5A}
-.badge-ferry{background:#FDF3E7;color:#C47A2A}
-.badge-booked{background:#FBF0EC;color:#B85C3A}
-.badge-photo{background:#EEEEF8;color:#5B6AAF}
-.card h3{font-size:16px;font-weight:700;margin-bottom:6px;line-height:1.3}
-.card p{font-size:14px;color:#555;margin-bottom:8px}
-.booked-tag{display:inline-block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#FFF;background:#B85C3A;padding:2px 8px;border-radius:4px;margin-left:6px;vertical-align:middle}
-.links{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-.btn{display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:600;text-decoration:none;padding:6px 12px;border-radius:8px;border:none;cursor:pointer;font-family:inherit}
-.btn:active{opacity:.7}
-.btn-map{color:#2E6B5A;background:#E8F0ED}
-.btn-web{color:#C47A2A;background:#FDF3E7}
-.btn-phone{color:#666;background:#F0F0F0}
-.check-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid #E8E5E0;font-size:14px}
-.check-item:last-child{border-bottom:none}
-.list-card{background:#FFF;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.06);padding:16px;margin-bottom:10px}
-.list-card.warn{background:#F9F8F6;border:1px dashed #E8E5E0;box-shadow:none}
-.list-card h3{font-size:15px;font-weight:700;margin-bottom:10px}
-.list-item{display:flex;align-items:flex-start;gap:8px;padding:4px 0;font-size:14px;color:#555}
-.list-item span.dot{color:#CCC;font-size:16px;line-height:1}
-@media(min-width:600px){.content{max-width:540px}.nav{justify-content:center}}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#F7F5F2;color:#2C2C2C;line-height:1.55;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;min-height:100vh}
+.hub{max-width:540px;margin:0 auto;padding:32px 20px 80px}
+.hub h1{font-family:Georgia,serif;font-size:32px;font-weight:400;letter-spacing:-.5px;text-align:center;margin-bottom:6px}
+.hub .sub{text-align:center;font-size:14px;color:#7A7A7A;margin-bottom:32px}
+.trip-card{display:block;text-decoration:none;color:inherit;background:#FFF;border-radius:16px;box-shadow:0 2px 8px rgba(0,0,0,.07);overflow:hidden;margin-bottom:20px;transition:transform .15s,box-shadow .15s}
+.trip-card:active{transform:scale(.98);box-shadow:0 1px 4px rgba(0,0,0,.1)}
+.trip-hero{height:160px;background-size:cover;background-position:center;position:relative;display:flex;align-items:flex-end;padding:14px 16px}
+.trip-hero::after{content:'';position:absolute;inset:0;background:linear-gradient(transparent 30%,rgba(0,0,0,.45));border-radius:16px 16px 0 0}
+.trip-hero .emoji{font-size:36px;z-index:1;filter:drop-shadow(0 2px 4px rgba(0,0,0,.3))}
+.trip-body{padding:16px 16px 18px}
+.trip-body h2{font-family:Georgia,serif;font-size:22px;font-weight:400;margin-bottom:2px}
+.trip-body .dates{font-size:13px;color:#7A7A7A;margin-bottom:10px}
+.countdown{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;padding:5px 12px;border-radius:8px}
+.countdown.upcoming{background:#E8F0ED;color:#2E6B5A}
+.countdown.soon{background:#FDF3E7;color:#C47A2A}
+.countdown.now{background:#FBF0EC;color:#B85C3A;animation:pulse 2s infinite}
+.countdown.past{background:#F0F0F0;color:#999}
+.trip-teaser{font-size:13px;color:#888;margin-top:10px;line-height:1.5}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.section-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#2E6B5A;margin-bottom:12px;margin-top:8px}
+.placeholder-card{background:#FFF;border-radius:16px;box-shadow:0 2px 8px rgba(0,0,0,.07);padding:24px;text-align:center;margin-bottom:20px}
+.placeholder-card .emoji-big{font-size:48px;margin-bottom:12px}
+.placeholder-card h2{font-family:Georgia,serif;font-size:20px;font-weight:400;margin-bottom:4px}
+.placeholder-card .dates{font-size:13px;color:#7A7A7A;margin-bottom:8px}
+.placeholder-card .note{font-size:13px;color:#AAA;font-style:italic}
 </style>
 </head>
 <body>
-
-<div class="header">
-  <h1>Arran & Oban</h1>
-  <div class="sub">6 - 11 April 2026</div>
+<div class="hub">
+  <h1>Our Trips</h1>
+  <div class="sub">Family adventures, planned and packed</div>
+  <div id="trips"></div>
 </div>
 
-<nav class="nav" id="nav"></nav>
-<div class="content" id="content"></div>
-
 <script>
-const DAYS=[
-{id:"mon",short:"Mon 6",label:"Monday 6 April",title:"Durham to Arran",drive:"3.5 hrs drive + 1 hr ferry + 15 min to Lamlash"},
-{id:"tue",short:"Tue 7",label:"Tuesday 7 April",title:"Brodick Castle Day",drive:"10 min Lamlash to Brodick Castle"},
-{id:"wed",short:"Wed 8",label:"Wednesday 8 April",title:"West Side of the Island",drive:"20 min to alpacas · 5 min to Machrie · 5 min to Blackwaterfoot"},
-{id:"thu",short:"Thu 9",label:"Thursday 9 April",title:"Heritage & Marine Life",drive:"All within 10 min in Brodick/Lamlash"},
-{id:"fri",short:"Fri 10",label:"Friday 10 April",title:"Arran to Connel",drive:"30 min + ferry 30 min + 15 min + 40 min + 50 min"},
-{id:"sat",short:"Sat 11",label:"Saturday 11 April",title:"Parkrun & Drive Home",drive:"2 hrs to Luss · 3.5 hrs to Durham"},
-{id:"bookings",short:"Bookings",label:"Bookings",title:"What's sorted & what's left",drive:""},
-{id:"shopping",short:"Shopping",label:"Asda Ardrossan",title:"Shopping List",drive:"Big shop before the ferry. Co-op on Arran is small and pricey."},
-{id:"packing",short:"Packing",label:"Packing List",title:"What to bring",drive:"Scotland in April. Expect all four seasons in one day."}
+const TRIPS=[
+  {
+    id:"arran",
+    title:"Arran & Oban",
+    emoji:"🏴󠁧󠁢󠁳󠁣󠁴󠁿",
+    dates:"6 - 11 April 2026",
+    start:new Date("2026-04-06T00:00:00"),
+    end:new Date("2026-04-11T23:59:59"),
+    href:"./arran.html",
+    teaser:"Castles, alpacas, standing stones, ferries, parkrun. 6 days around the Scottish islands.",
+    bg:"linear-gradient(135deg,#2E6B5A 0%,#4A9B7F 50%,#7ABFA5 100%)",
+    ready:true
+  },
+  {
+    id:"malta",
+    title:"Malta",
+    emoji:"🇲🇹",
+    dates:"Coming soon",
+    start:null,
+    end:null,
+    href:null,
+    teaser:null,
+    bg:"linear-gradient(135deg,#C47A2A 0%,#E8A84C 100%)",
+    ready:false
+  },
+  {
+    id:"japan",
+    title:"Japan",
+    emoji:"🇯🇵",
+    dates:"Coming soon",
+    start:null,
+    end:null,
+    href:null,
+    teaser:null,
+    bg:"linear-gradient(135deg,#B85C3A 0%,#D4836B 100%)",
+    ready:false
+  }
 ];
 
-const ITEMS={
-mon:[
-{time:"Morning",type:"default",title:"Drive Durham to Ardrossan",desc:"M6 south then A77. About 3.5 hours.",maps:"https://www.google.com/maps/dir/Durham,+UK/Ardrossan+Harbour,+Ardrossan,+UK",ml:"Directions"},
-{time:"Pit stop",type:"default",title:"Tebay Services, M6",desc:"Farm shop, proper cooked food. Kids under 10 eat for £1 with an adult meal. Stock up on snacks.",maps:"https://www.google.com/maps/search/Tebay+Services+M6",ml:"Map"},
-{time:"Before the ferry",type:"default",title:"Asda Ardrossan",desc:"Full-size supermarket, 5 min from the ferry terminal. Do your big shop here. Fill up with petrol too. Open 7am-11pm. See the Shopping tab for the list.",maps:"https://www.google.com/maps/search/Asda+Ardrossan+Harbour+Road",ml:"Map"},
-{time:"Ferry",type:"ferry",title:"Ardrossan to Brodick",booked:!0,desc:"CalMac, about 1 hour. Check in 30 min before.",web:"https://www.calmac.co.uk/",wl:"CalMac"},
-{time:"Evening",type:"default",title:"Arrive Lamlash",desc:"15 min from Brodick terminal. Settle in. Easy pasta or pizza night at the Airbnb.",maps:"https://www.google.com/maps/search/Drift+Inn+Lamlash+Arran",ml:"Directions"},
-{time:"Top-ups",type:"default",title:"Lamlash Co-op",desc:"2 min walk from Lamlash centre. Has a Post Office. Open 7am-10pm daily. Fine for milk, bread, basics during the week.",maps:"https://www.google.com/maps/search/Co-op+Lamlash+Isle+of+Arran",ml:"Map"}
-],
-tue:[
-{time:"Morning",type:"default",title:"Brodick Castle, Garden & Country Park",desc:"Opens 11am. NTS members free, otherwise ~£38.50 family. Half day here.\n\nDo first: Fairies & Legends Trail. Fairy doors, carved sculptures, story points. Get trail map at visitor centre.\n\nThen: Isle Be Wild playground. Toddler section + older kids with zip wires, rope bridges, towers, flying fox.\n\nAlso: Red squirrel hide. Walled garden with views over Brodick Bay.",maps:"https://www.google.com/maps/search/Brodick+Castle+Isle+of+Arran",ml:"Map",web:"https://www.nts.org.uk/visit/places/brodick-castle-garden-country-park",wl:"NTS website"},
-{time:"Lunch",type:"default",title:"Woodland Cafe at Brodick Castle",desc:"Soups, sandwiches, cakes. Picnic tables by the play park. Ice cream kiosk."},
-{time:"📸 Photo",type:"photo",title:"Brodick Castle Walled Garden",desc:"Views over Brodick Bay to Holy Isle from the upper terrace.",maps:"https://www.google.com/maps/search/Brodick+Castle+Isle+of+Arran",ml:"Map"},
-{time:"Afternoon",type:"default",title:"Rosaburn Ducks",desc:"Between Brodick village and the castle. Duck feed 50p honesty box. 15 min stop.",maps:"https://www.google.com/maps/search/Rosaburn+Brodick+Isle+of+Arran",ml:"Map"},
-{time:"6:00 PM · Dinner",type:"booked",title:"Drift Inn, Lamlash",booked:!0,desc:"Shore Road, Lamlash. Family friendly, right on the water.",maps:"https://www.google.com/maps/search/Drift+Inn+Lamlash+Arran",ml:"Map"},
-{time:"📸 Photo",type:"photo",title:"Lamlash Pier",desc:"Looking across to Holy Isle. Beautiful in evening light.",maps:"https://www.google.com/maps/search/Lamlash+Pier+Isle+of+Arran",ml:"Map"}
-],
-wed:[
-{time:"Morning",type:"booked",title:"Arran Alpacas, Balmichael",bookLabel:"Book 1 Mar",desc:"Alpaca Kids sessions, 60-90 min. £17pp age 8+, under 8s free sharing with adult. Games room, play area, duck pond, tuck shop with Arran ice cream. They take photos.",maps:"https://www.google.com/maps/search/Arran+Alpacas+Balmichael",ml:"Map",web:"https://www.arranalpacas.co.uk",wl:"Website (opens 1 Mar)",phone:"01770465095",pl:"01770 465 095"},
-{time:"Lunch",type:"default",title:"Cafe Thyme, Machrie",desc:"Turkish-style pizzas. Outdoor kids play area with swings. 5 min from the standing stones.",maps:"https://www.google.com/maps/search/Cafe+Thyme+Machrie+Arran",ml:"Map"},
-{time:"Afternoon",type:"default",title:"Machrie Moor Standing Stones",desc:"Free. Short flat walk from car park. 5,000+ year old stone circles. Both ages manage easily.",maps:"https://www.google.com/maps/search/Machrie+Moor+Standing+Stones+Arran",ml:"Map"},
-{time:"📸 Photo",type:"photo",title:"Machrie Moor Standing Stones",desc:"Moody, ancient landscape. One of the best spots on the island."},
-{time:"Late afternoon",type:"default",title:"Blackwaterfoot Beach",desc:"5 min from Machrie. Sandy beach, rock pools, stone skimming.",maps:"https://www.google.com/maps/search/Blackwaterfoot+Beach+Arran",ml:"Map"},
-{time:"📸 Photo",type:"photo",title:"Blackwaterfoot Sunset",desc:"West-facing. Sunset over Kintyre peninsula."},
-{time:"📸 Photo",type:"photo",title:"The String Road (B880)",desc:"If driving back across the island centre. Big mountain views.",maps:"https://www.google.com/maps/search/The+String+Road+B880+Arran",ml:"Map"},
-{time:"Evening · Dinner",type:"default",title:"Not booked",desc:"Pierhead Tavern (rooftop terrace, harbour views, haggis bonbons) or fish & chips.",maps:"https://www.google.com/maps/search/Pierhead+Tavern+Lamlash+Arran",ml:"Pierhead Tavern"},
-{time:"Evening option",type:"default",title:"Lochranza Deer Spotting",desc:"30 min drive. Red deer graze by the ruined castle at dusk. Worth doing one evening this week.",maps:"https://www.google.com/maps/search/Lochranza+Castle+Isle+of+Arran",ml:"Map"}
-],
-thu:[
-{time:"Morning",type:"default",title:"Arran Heritage Museum, Brodick",desc:"~£10 family. Croft house, 1940s schoolroom, blacksmith's forge. Old tractor to climb on. About an hour.",maps:"https://www.google.com/maps/search/Isle+of+Arran+Heritage+Museum",ml:"Map"},
-{time:"Lunch",type:"default",title:"Cafe Rosaburn at the Heritage Museum",desc:"Toasties, soup, cakes. Cheap, cheerful. Inside or outside."},
-{time:"Afternoon",type:"default",title:"COAST Discovery Centre, Lamlash",desc:"Free. Open 7 days 10am-4pm. Touch tanks with crabs, lobsters, fish. Outdoor putting and tennis (honesty box). Right on the seafront.",maps:"https://www.google.com/maps/search/COAST+Discovery+Centre+Lamlash",ml:"Map",web:"https://www.arrancoast.com",wl:"Website"},
-{time:"~3:00 PM",type:"booked",title:"Auchrannie Swimming",booked:!0,desc:"Spa Resort pool. Non-residents 10am-4pm (last entry 3pm). Children's pool with water features + 20m main pool. Arrive by 3pm, swim til ~4:30, change, walk to dinner.",maps:"https://www.google.com/maps/search/Auchrannie+Resort+Brodick+Arran",ml:"Map",phone:"01770303306",pl:"01770 303 306"},
-{time:"6:00 PM · Dinner",type:"booked",title:"Auchrannie Resort",booked:!0,desc:"On site after swimming.",web:"https://www.auchrannie.co.uk",wl:"Website"},
-{time:"☔ Rainy day backup",type:"dashed",title:"The Playbarn at Auchrannie",desc:"Soft play, open to non-guests. If the weather is rough, swap outdoor stuff for this."}
-],
-fri:[
-{time:"Morning",type:"default",title:"Drive Lamlash to Lochranza",desc:"30 min. Stunning coastal road, mountains one side, sea the other.",maps:"https://www.google.com/maps/dir/Lamlash+Isle+of+Arran/Lochranza+Isle+of+Arran",ml:"Directions"},
-{time:"📸 Photo",type:"photo",title:"Lochranza Castle",desc:"Ruined castle by the ferry. Red deer often nearby. Mountains behind.",maps:"https://www.google.com/maps/search/Lochranza+Castle+Isle+of+Arran",ml:"Map"},
-{time:"Ferry",type:"ferry",title:"Lochranza to Claonaig",booked:!0,desc:"30 min crossing. Arrive early.",web:"https://www.calmac.co.uk/",wl:"CalMac"},
-{time:"Late morning",type:"default",title:"Tarbert",desc:"Pretty fishing harbour, 15 min from Claonaig. Quick wander.",maps:"https://www.google.com/maps/search/Tarbert+Harbour+Argyll",ml:"Map"},
-{time:"📸 Photo",type:"photo",title:"Tarbert Harbour",desc:"Colourful fishing boats."},
-{time:"Lunch",type:"default",title:"Cafe Ca'Dora, Tarbert",desc:"4.7 stars. Fresh seafood, good coffee, harbour views.",maps:"https://www.google.com/maps/search/Cafe+CaDora+Tarbert",ml:"Map"},
-{time:"Early afternoon",type:"default",title:"Kilmartin Museum & Glen",desc:"40 min from Tarbert. Open daily 10am-5pm. Reopened 2023. Standing stones, burial cairns. Glen Bistro cafe on site. Allow 1.5-2 hours.",maps:"https://www.google.com/maps/search/Kilmartin+Museum+Argyll",ml:"Map",web:"https://www.kilmartin.org",wl:"Website"},
-{time:"📸 Photo",type:"photo",title:"Kilmartin Glen",desc:"Ancient standing stones and burial cairns. 5,000 year old landscape.",maps:"https://www.google.com/maps/search/Kilmartin+Museum+Argyll",ml:"Map"},
-{time:"📸 Photo",type:"photo",title:"Kilchurn Castle",desc:"On the A85 towards Connel. Head of Loch Awe. Visible from a layby.",maps:"https://www.google.com/maps/search/Kilchurn+Castle+Loch+Awe",ml:"Map"},
-{time:"Late afternoon",type:"default",title:"Ocean Explorer Centre, Dunbeg",desc:"10 min north of Connel. Free. Open Mon-Fri 10am-4pm. Interactive marine science.",maps:"https://www.google.com/maps/search/Ocean+Explorer+Centre+Dunbeg",ml:"Map",web:"https://www.oceanexplorercentre.org",wl:"Website"},
-{time:"6:30 PM · Dinner",type:"booked",title:"Oyster Inn, Connel",booked:!0,desc:"Where you're staying tonight.",maps:"https://www.google.com/maps/search/Oyster+Inn+Connel",ml:"Map",web:"https://www.oysterinn.co.uk",wl:"Website"}
-],
-sat:[
-{time:"9:30 AM",type:"booked",title:"Oban Parkrun",desc:"10 min from the Oyster Inn. Back to hotel, shower, leave by ~11:15.",maps:"https://www.google.com/maps/search/Oban+parkrun+Ganavan",ml:"Map",web:"https://www.parkrun.org.uk/oban/",wl:"Parkrun page"},
-{time:"📸 If time before parkrun",type:"photo",title:"McCaig's Tower, Oban",desc:"Steep walk from town. Panoramic harbour/island views. Kids can run inside.",maps:"https://www.google.com/maps/search/McCaigs+Tower+Oban",ml:"Map"},
-{time:"~11:15 AM",type:"default",title:"Drive Connel to Luss",desc:"About 2 hours. A85 along Loch Awe then A82 along Loch Lomond.",maps:"https://www.google.com/maps/dir/Connel+Oban/Luss+Loch+Lomond",ml:"Directions"},
-{time:"1:30 PM · Lunch",type:"booked",title:"Colquhoun's, Luss",booked:!0,desc:"Loch Lomond. Faerie Trail nearby (fairy houses, short woodland walk). Beach and pier for a run around.",maps:"https://www.google.com/maps/search/Luss+Village+Loch+Lomond",ml:"Map"},
-{time:"~3:00 PM",type:"default",title:"Drive Luss to Durham",desc:"About 3.5 hours via M74/M6.",maps:"https://www.google.com/maps/dir/Luss,+Alexandria,+UK/Durham,+UK",ml:"Directions"},
-{time:"Pit stop",type:"default",title:"Tebay Services (M6 southbound)",desc:"Farm shop. Kids under 10 eat for £1 with adult meal.",maps:"https://www.google.com/maps/search/Tebay+Services+M6",ml:"Map"},
-{time:"Alternative route",type:"dashed",title:"Via A66",desc:"Surprise View near Keswick (1 min walk, spectacular) or Bassenthwaite Lake (free, roadside).",maps:"https://www.google.com/maps/search/Surprise+View+Keswick+Derwentwater",ml:"Surprise View"}
-]
-};
-
-const BOOKINGS=[
-{done:!0,text:"CalMac ferry Ardrossan to Brodick (Mon 6th)"},
-{done:!0,text:"Drift Inn, Lamlash, 6pm (Tue 7th)"},
-{done:!0,text:"Auchrannie dinner, 6pm (Thu 9th)"},
-{done:!0,text:"Auchrannie swimming (Thu 9th)"},
-{done:!0,text:"Lochranza to Claonaig ferry (Fri 10th)"},
-{done:!0,text:"Oyster Inn, Connel, 6:30pm (Fri 10th)"},
-{done:!0,text:"Colquhoun's, Luss, 1:30pm (Sat 11th)"},
-{done:!1,text:"Arran Alpacas",extra:"book from 1 March",web:"https://www.arranalpacas.co.uk",phone:"01770465095"},
-{done:!1,text:"Wednesday dinner",extra:"Pierhead Tavern or wing it"}
-];
-
-const SHOPPING=[
-{cat:"Breakfasts",items:["Bread, butter, milk, eggs","Cereal, yoghurts, fruit (bananas, apples, satsumas)","Juice/squash, jam","Bacon or sausages for one cooked morning"]},
-{cat:"Lunches (backup, eating out most days)",items:["Ham, cheese, cucumber for sandwiches","Crisps, biscuits"]},
-{cat:"Monday night dinner (easy one after the drive)",items:["Pasta + jar of sauce + garlic bread","Or freezer pizza","Salad bag"]},
-{cat:"Snacks & drinks",items:["Snack bars/flapjacks for car and walks","Fruit, raisins, rice cakes","Biscuits","Tea bags, coffee, sugar","Wine/beer for the evenings","Squash or juice cartons for kids"]},
-{cat:"Essentials",items:["Kitchen roll, bin bags","Washing up liquid","Cling film or foil","Baby wipes"]},
-{cat:"Petrol",items:["Fill up at Asda before the ferry"]},
-{cat:"Don't buy on the mainland",items:["Ice cream (buy Arran ice cream on the island)","Cheese (free tastings at Arran Cheese Shop, Home Farm)","Bread (Wooleys Bakery in Brodick is better)"]}
-];
-
-const PACKING=[
-{cat:"Outdoor layers (April Scotland = unpredictable)",items:["Waterproof jackets for all four of you (non-negotiable)","Waterproof trousers for the kids","Fleeces or warm mid-layers","Hats and gloves (mornings can be cold)","Sunglasses and sun cream (yes, in April)"]},
-{cat:"Footwear",items:["Walking boots or sturdy trainers for adults","Wellies for the kids (beaches, rock pools, muddy paths)","Spare shoes for evenings and restaurants","Flip flops or pool shoes for Auchrannie swimming"]},
-{cat:"Swimming (Thursday at Auchrannie)",items:["Swimsuits for everyone","Towels (check Airbnb provides enough)","Swim nappies if needed for the 4yr old","Goggles"]},
-{cat:"Parkrun (Saturday, Oban)",items:["Running shoes","Running kit","Barcode (print or phone)"]},
-{cat:"Beach and outdoors",items:["Bucket and spade for Blackwaterfoot/Kildonan","Net for rock pools","Small backpack/daypack for walks","Reusable water bottles","Picnic blanket"]},
-{cat:"Car journey (2 x 3.5 hr drives + ferry)",items:["Tablet/iPad loaded with films and games","Headphones for kids","Chargers and in-car USB cables","Colouring books, stickers, small toys","Snacks (stock up at Tebay and Asda)","Sick bags (just in case, ferry or winding roads)","Travel pillow for the 4yr old"]},
-{cat:"For the Airbnb",items:["Dishwasher tablets/washing up liquid","Bin bags (often missing)","Tea towels (bring one spare)","Kids bedtime books","Night light if the 4yr old uses one","Baby monitor if needed"]},
-{cat:"Essentials",items:["First aid kit (plasters, Calpol, antihistamine)","Suncream and aftersun","Midge spray (April is early but worth having)","Baby wipes (useful for everything)","Phone chargers and portable battery pack","Cash (honesty boxes, duck feed, small cafes)","NTS membership cards if you have them","CalMac booking confirmation","Camera or make sure phones have space"]},
-{cat:"Nice to have",items:["Binoculars (squirrels, seals, deer)","Bird/wildlife ID book or app for the kids","Backpack carrier if the 4yr old gets tired"]}
-];
-
-const mapSvg='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>';
-
-let active="mon";
-
-function renderNav(){
-  const nav=document.getElementById("nav");
-  nav.innerHTML=DAYS.map(d=>`<button class="${d.id===active?'active':''}" data-id="${d.id}">${d.short}</button>`).join("");
-  nav.querySelectorAll("button").forEach(b=>b.onclick=()=>{active=b.dataset.id;renderNav();renderContent();window.scrollTo(0,0)});
+function getCountdown(trip){
+  if(!trip.start) return null;
+  const now=new Date();
+  if(now>=trip.start&&now<=trip.end) return {text:"You're on this trip right now!",cls:"now"};
+  if(now>trip.end) return {text:"Trip complete ✓",cls:"past"};
+  const diff=trip.start-now;
+  const days=Math.ceil(diff/(1000*60*60*24));
+  if(days<=7) return {text:`${days} day${days===1?'':'s'} to go!`,cls:"soon"};
+  return {text:`${days} days to go`,cls:days<=30?"soon":"upcoming"};
 }
 
-function btn(href,cls,label,isPhone){
-  return `<a class="btn ${cls}" href="${isPhone?'tel:'+href:href}" ${isPhone?'':'target="_blank" rel="noopener"'}>${label}</a>`;
-}
+function render(){
+  const el=document.getElementById("trips");
+  const ready=TRIPS.filter(t=>t.ready);
+  const planned=TRIPS.filter(t=>!t.ready);
 
-function renderCard(item){
-  const bc={default:"badge-default",ferry:"badge-ferry",booked:"badge-booked",photo:"badge-photo",dashed:"badge-default"}[item.type]||"badge-default";
-  const cc=item.type==="photo"?"photo":item.type==="dashed"?"dashed":"";
-  const paras=item.desc?item.desc.split("\n\n").map(p=>`<p>${p}</p>`).join(""):"";
-  const bk=item.booked?'<span class="booked-tag">Booked</span>':"";
-  const bl=item.bookLabel?`<span class="booked-tag">${item.bookLabel}</span>`:"";
-  let links="";
-  if(item.maps) links+=btn(item.maps,"btn-map",mapSvg+" "+(item.ml||"Map"));
-  if(item.web) links+=btn(item.web,"btn-web",item.wl||"Website");
-  if(item.phone) links+=btn(item.phone,"btn-phone","📞 "+(item.pl||item.phone),!0);
-  return `<div class="card ${cc}"><span class="badge ${bc}">${item.time}</span><h3>${item.title}${bk}${bl}</h3>${paras}${links?'<div class="links">'+links+'</div>':''}</div>`;
-}
+  let html='<div class="section-label">Planned</div>';
 
-function renderList(data,warn){
-  return data.map(s=>{
-    const isWarn=warn&&s.cat.startsWith("Don't");
-    const items=s.items.map(i=>`<div class="list-item"><span class="dot">○</span><span>${i}</span></div>`).join("");
-    return `<div class="list-card ${isWarn?'warn':''}"><h3 style="${isWarn?'color:#B85C3A':''}">${s.cat}</h3>${items}</div>`;
-  }).join("");
-}
+  ready.forEach(t=>{
+    const cd=getCountdown(t);
+    html+=`<a class="trip-card" href="${t.href}">
+      <div class="trip-hero" style="background:${t.bg}">
+        <span class="emoji">${t.emoji}</span>
+      </div>
+      <div class="trip-body">
+        <h2>${t.title}</h2>
+        <div class="dates">${t.dates}</div>
+        ${cd?`<span class="countdown ${cd.cls}">${cd.text}</span>`:''}
+        ${t.teaser?`<div class="trip-teaser">${t.teaser}</div>`:''}
+      </div>
+    </a>`;
+  });
 
-function renderContent(){
-  const day=DAYS.find(d=>d.id===active);
-  let html=`<div class="day-head"><div class="day-label">${day.label}</div><div class="day-title">${day.title}</div>${day.drive?'<div class="day-drive">'+day.drive+'</div>':''}</div>`;
-
-  if(active==="bookings"){
-    html+=BOOKINGS.map(b=>{
-      let extra=b.extra?` — ${b.extra}`:"";
-      let links="";
-      if(b.web) links+=btn(b.web,"btn-web","Website");
-      if(b.phone) links+=btn(b.phone,"btn-phone","📞 "+b.phone,!0);
-      return `<div class="check-item"><span style="font-weight:700;color:${b.done?'#2E6B5A':'#B85C3A'}">${b.done?'✓':'!'}</span><div>${b.text}${extra}${links?'<div class="links" style="margin-top:6px">'+links+'</div>':''}</div></div>`;
-    }).join("");
-  } else if(active==="shopping"){
-    html+=`<div class="card"><span class="badge badge-default">Asda Ardrossan</span><p>5 min from the ferry. Open 7am-11pm. Fill up with petrol here too.</p><div class="links">${btn("https://www.google.com/maps/search/Asda+Ardrossan+Harbour+Road","btn-map",mapSvg+" Map")}</div></div>`;
-    html+=renderList(SHOPPING,!0);
-  } else if(active==="packing"){
-    html+=renderList(PACKING,!1);
-  } else {
-    html+=(ITEMS[active]||[]).map(renderCard).join("");
+  if(planned.length){
+    html+='<div class="section-label" style="margin-top:24px">On the horizon</div>';
+    planned.forEach(t=>{
+      html+=`<div class="placeholder-card">
+        <div class="emoji-big">${t.emoji}</div>
+        <h2>${t.title}</h2>
+        <div class="dates">${t.dates}</div>
+        <div class="note">Itinerary coming soon</div>
+      </div>`;
+    });
   }
 
-  document.getElementById("content").innerHTML=html;
+  el.innerHTML=html;
 }
 
-renderNav();
-renderContent();
+render();
+setInterval(render,60000);
 
 if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js').catch(()=>{});}
 </script>
