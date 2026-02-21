@@ -62,11 +62,11 @@ const TRIPS=[
     id:"malta",
     title:"Malta",
     emoji:"🇲🇹",
-    dates:"Coming soon",
-    start:null,
-    end:null,
+    dates:"20 - 30 July 2026",
+    start:new Date("2026-07-20T00:00:00"),
+    end:new Date("2026-07-30T23:59:59"),
     href:null,
-    teaser:null,
+    teaser:"Sun, ancient temples, crystal lagoons. 11 days in the Mediterranean.",
     bg:"linear-gradient(135deg,#C47A2A 0%,#E8A84C 100%)",
     ready:false
   },
@@ -74,11 +74,11 @@ const TRIPS=[
     id:"japan",
     title:"Japan",
     emoji:"🇯🇵",
-    dates:"Coming soon",
-    start:null,
-    end:null,
+    dates:"24 March - 9 April 2027",
+    start:new Date("2027-03-24T00:00:00"),
+    end:new Date("2027-04-09T23:59:59"),
     href:null,
-    teaser:null,
+    teaser:"Cherry blossom season. 17 days from Tokyo to Kyoto and beyond.",
     bg:"linear-gradient(135deg,#B85C3A 0%,#D4836B 100%)",
     ready:false
   }
@@ -120,11 +120,14 @@ function render(){
   if(planned.length){
     html+='<div class="section-label" style="margin-top:24px">On the horizon</div>';
     planned.forEach(t=>{
+      const cd=getCountdown(t);
       html+=`<div class="placeholder-card">
         <div class="emoji-big">${t.emoji}</div>
         <h2>${t.title}</h2>
         <div class="dates">${t.dates}</div>
-        <div class="note">Itinerary coming soon</div>
+        ${cd?`<span class="countdown ${cd.cls}" style="margin-bottom:8px">${cd.text}</span>`:''}
+        ${t.teaser?`<div class="trip-teaser" style="color:#888;font-size:13px;margin-top:8px">${t.teaser}</div>`:''}
+        <div class="note" style="margin-top:8px">Itinerary coming soon</div>
       </div>`;
     });
   }

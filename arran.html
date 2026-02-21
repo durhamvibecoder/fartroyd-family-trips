@@ -78,7 +78,8 @@ const DAYS=[
 {id:"bookings",short:"Bookings",label:"Bookings",title:"What's sorted & what's left",drive:""},
 {id:"shopping",short:"Shopping",label:"Asda Ardrossan",title:"Shopping List",drive:"Big shop before the ferry. Co-op on Arran is small and pricey."},
 {id:"packing",short:"Packing",label:"Packing List",title:"What to bring",drive:"Scotland in April. Expect all four seasons in one day."},
-{id:"photos",short:"📸 Map",label:"Photo Spots",title:"Photo spots on the map",drive:"All the best spots across the trip, plotted so you can see them in context."}
+{id:"photos",short:"📸 Map",label:"Photo Spots",title:"Photo spots on the map",drive:"All the best spots across the trip, plotted so you can see them in context."},
+{id:"weather",short:"☁️ Weather",label:"Weather Forecast",title:"Arran & Oban forecast",drive:"Live forecast from Open-Meteo. Updates each time you open this tab."}
 ];
 
 const ITEMS={
@@ -275,11 +276,114 @@ function renderContent(){
         </div>
       </div>`;
     });
+  } else if(active==="weather"){
+    html+=`<div id="weather-loading" class="card" style="text-align:center;padding:24px;color:#888">Loading forecast...</div>`;
+    setTimeout(loadWeather,50);
   } else {
     html+=(ITEMS[active]||[]).map(renderCard).join("");
   }
 
   document.getElementById("content").innerHTML=html;
+}
+
+const WMO_CODES={0:"☀️ Clear",1:"🌤 Mostly clear",2:"⛅ Partly cloudy",3:"☁️ Overcast",45:"🌫 Foggy",48:"🌫 Rime fog",51:"🌦 Light drizzle",53:"🌦 Drizzle",55:"🌧 Heavy drizzle",61:"🌧 Light rain",63:"🌧 Rain",65:"🌧 Heavy rain",71:"🌨 Light snow",73:"🌨 Snow",75:"🌨 Heavy snow",77:"🌨 Snow grains",80:"🌦 Light showers",81:"🌧 Showers",82:"🌧 Heavy showers",85:"🌨 Snow showers",86:"🌨 Heavy snow showers",95:"⛈ Thunderstorm",96:"⛈ Hail storm",99:"⛈ Heavy hail"};
+
+const LOCATIONS=[
+  {name:"Isle of Arran",lat:55.58,lng:-5.22,days:["Mon 6","Tue 7","Wed 8","Thu 9"]},
+  {name:"Oban / Connel",lat:56.41,lng:-5.47,days:["Fri 10","Sat 11"]}
+];
+
+async function loadWeather(){
+  const container=document.getElementById("weather-loading");
+  if(!container) return;
+  
+  const tripStart="2026-04-06",tripEnd="2026-04-11";
+  const now=new Date();
+  const start=new Date(tripStart);
+  const diff=Math.ceil((start-now)/(1000*60*60*24));
+  
+  // Open-Meteo free forecast only covers ~16 days ahead
+  if(diff>16){
+    container.outerHTML=`
+      <div class="card" style="text-align:center;padding:20px">
+        <div style="font-size:36px;margin-bottom:8px">🌦</div>
+        <h3 style="margin-bottom:6px">Forecast not available yet</h3>
+        <p>Open-Meteo provides forecasts up to 16 days ahead. Check back from <strong>${formatCountdownDate(start,16)}</strong> for the Arran forecast.</p>
+        <div style="margin-top:16px;padding:16px;background:#F9F8F6;border-radius:10px;text-align:left">
+          <h3 style="font-size:14px;margin-bottom:8px">What to expect in April</h3>
+          <p style="font-size:13px;color:#666">Arran in early April: highs around 9-12°C, lows 4-7°C. Mix of sunshine, cloud, and rain. Wind off the sea can make it feel colder. West coast gets more rain than the east. Pack for all of it.</p>
+        </div>
+      </div>`;
+    return;
+  }
+  
+  try{
+    let allHtml='';
+    for(const loc of LOCATIONS){
+      const url=`https://api.open-meteo.com/v1/forecast?latitude=${loc.lat}&longitude=${loc.lng}&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_probability_max,windspeed_10m_max&start_date=${tripStart}&end_date=${tripEnd}&timezone=Europe/London`;
+      const res=await fetch(url);
+      const data=await res.json();
+      
+      if(!data.daily){continue;}
+      
+      allHtml+=`<div class="card" style="padding:12px 16px">
+        <span class="badge badge-default">${loc.name}</span>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">`;
+      
+      const dates=data.daily.time;
+      const codes=data.daily.weathercode;
+      const highs=data.daily.temperature_2m_max;
+      const lows=data.daily.temperature_2m_min;
+      const rain=data.daily.precipitation_probability_max;
+      const wind=data.daily.windspeed_10m_max;
+      
+      // Only show days relevant to this location
+      const dayNames=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+      
+      dates.forEach((d,i)=>{
+        const dt=new Date(d+"T12:00:00");
+        const dayStr=dayNames[dt.getDay()]+" "+dt.getDate();
+        if(!loc.days.some(ld=>dayStr.startsWith(ld.split(" ")[0])&&dayStr.endsWith(ld.split(" ")[1]))) return;
+        
+        const weather=WMO_CODES[codes[i]]||"Unknown";
+        const rainPct=rain[i]||0;
+        const rainBar=rainPct>0?`<div style="width:${Math.max(rainPct,8)}%;height:4px;background:${rainPct>50?'#5B6AAF':'#B8C4E0'};border-radius:2px;margin-top:2px"></div>`:'';
+        
+        allHtml+=`<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #F0EDE8">
+          <div style="min-width:52px;font-size:13px;font-weight:700;color:#555">${dayStr}</div>
+          <div style="flex:1">
+            <div style="font-size:14px">${weather}</div>
+            <div style="font-size:12px;color:#999">${rainPct}% rain · ${Math.round(wind[i])} km/h wind</div>
+            ${rainBar}
+          </div>
+          <div style="text-align:right;min-width:55px">
+            <span style="font-size:15px;font-weight:700">${Math.round(highs[i])}°</span>
+            <span style="font-size:13px;color:#999"> ${Math.round(lows[i])}°</span>
+          </div>
+        </div>`;
+      });
+      
+      allHtml+=`</div></div>`;
+    }
+    
+    allHtml+=`<div class="card dashed" style="text-align:center;padding:16px;font-size:12px;color:#999">
+      Forecast from <a href="https://open-meteo.com" target="_blank" rel="noopener" style="color:#2E6B5A">Open-Meteo</a>. Updates every time you open this tab. Most accurate within 7 days of travel.
+    </div>`;
+    
+    container.outerHTML=allHtml;
+  }catch(e){
+    container.outerHTML=`<div class="card" style="text-align:center;padding:20px">
+      <div style="font-size:36px;margin-bottom:8px">📡</div>
+      <h3>Couldn't load forecast</h3>
+      <p>You might be offline. The forecast needs an internet connection. Try again when you have signal.</p>
+    </div>`;
+  }
+}
+
+function formatCountdownDate(tripDate,daysBefore){
+  const d=new Date(tripDate);
+  d.setDate(d.getDate()-daysBefore);
+  return d.toLocaleDateString('en-GB',{day:'numeric',month:'long'});
 }
 
 renderNav();
