@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#2E6B5A">
+<link rel="manifest" href="./manifest.json">
+<title>Ireland Road Trip | 1-8 August 2027</title>
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%232E6B5A' width='100' height='100' rx='20'/><text x='50' y='72' text-anchor='middle' font-size='55' fill='white'>☘</text></svg>">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#F7F5F2;color:#2C2C2C;line-height:1.55;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+.back{display:inline-flex;align-items:center;gap:4px;font-size:13px;font-weight:600;color:#2E6B5A;text-decoration:none;padding:16px 20px 0}
+.back:active{opacity:.6}
+.countdown-banner{text-align:center;padding:8px 20px 0;font-size:13px;font-weight:700;color:#C47A2A}
+.header{padding:16px 20px 14px;text-align:center}
+.header h1{font-family:Georgia,serif;font-size:28px;font-weight:400;letter-spacing:-.5px;margin-bottom:4px}
+.header .sub{font-size:14px;color:#7A7A7A;font-weight:500}
+.nav{position:sticky;top:0;z-index:100;background:#F7F5F2;border-bottom:1px solid #E8E5E0;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:10px 16px;display:flex;gap:8px}
+.nav::-webkit-scrollbar{display:none}
+.nav button{flex-shrink:0;padding:6px 14px;border-radius:20px;font-size:13px;font-weight:600;border:1px solid #E8E5E0;background:#FFF;color:#7A7A7A;cursor:pointer;white-space:nowrap;font-family:inherit;transition:all .15s}
+.nav button.active{background:#2E6B5A;color:#FFF;border-color:#2E6B5A}
+.content{padding:0 16px;max-width:540px;margin:0 auto;padding-bottom:80px}
+.day-head{padding:20px 0 12px}
+.day-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#2E6B5A;margin-bottom:2px}
+.day-title{font-family:Georgia,serif;font-size:22px;font-weight:400}
+.day-drive{font-size:13px;color:#7A7A7A;margin-top:4px}
+.card{background:#FFF;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.06);padding:16px;margin-bottom:10px}
+.card.photo{border-left:3px solid #5B6AAF}
+.card.dashed{background:#F9F8F6;border:1px dashed #E8E5E0;box-shadow:none}
+.badge{display:inline-block;font-size:12px;font-weight:700;padding:3px 10px;border-radius:6px;margin-bottom:8px}
+.badge-default{background:#E8F0ED;color:#2E6B5A}
+.badge-ferry{background:#FDF3E7;color:#C47A2A}
+.badge-booked{background:#FBF0EC;color:#B85C3A}
+.badge-photo{background:#EEEEF8;color:#5B6AAF}
+.card h3{font-size:16px;font-weight:700;margin-bottom:6px;line-height:1.3}
+.card p{font-size:14px;color:#555;margin-bottom:8px}
+.booked-tag{display:inline-block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#FFF;background:#B85C3A;padding:2px 8px;border-radius:4px;margin-left:6px;vertical-align:middle}
+.links{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.btn{display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:600;text-decoration:none;padding:6px 12px;border-radius:8px;border:none;cursor:pointer;font-family:inherit}
+.btn:active{opacity:.7}
+.btn-map{color:#2E6B5A;background:#E8F0ED}
+.btn-web{color:#C47A2A;background:#FDF3E7}
+.btn-phone{color:#666;background:#F0F0F0}
+.check-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid #E8E5E0;font-size:14px}
+.check-item:last-child{border-bottom:none}
+.list-card{background:#FFF;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.06);padding:16px;margin-bottom:10px}
+.list-card.warn{background:#F9F8F6;border:1px dashed #E8E5E0;box-shadow:none}
+.list-card h3{font-size:15px;font-weight:700;margin-bottom:10px}
+.list-item{display:flex;align-items:flex-start;gap:8px;padding:4px 0;font-size:14px;color:#555}
+.list-item span.dot{color:#CCC;font-size:16px;line-height:1}
+@media(min-width:600px){.content{max-width:540px}.nav{justify-content:center}}
+</style>
+</head>
+<body>
+
+<a class="back" href="./">← All trips</a>
+<div class="countdown-banner" id="countdown"></div>
+
+<div class="header">
+  <h1>Ireland Road Trip</h1>
+  <div class="sub">1 - 8 August 2027</div>
+</div>
+
+<nav class="nav" id="nav"></nav>
+<div class="content" id="content"></div>
+
+<script>
+const TRIP_START="2027-08-01";
+const TRIP_END="2027-08-08";
+
+const DAYS=[
+{id:"fri1",short:"Fri 1",label:"Friday 1 August",title:"Durham to Belfast",drive:"3 hrs drive + 2h15 ferry"},
+{id:"sat2",short:"Sat 2",label:"Saturday 2 August",title:"Causeway Coast",drive:"1.5 hrs Belfast to Giant's Causeway"},
+{id:"sun3",short:"Sun 3",label:"Sunday 3 August",title:"Causeway to Galway",drive:"4 hrs via Donegal or direct"},
+{id:"mon4",short:"Mon 4",label:"Monday 4 August",title:"Cliffs of Moher Day Trip",drive:"1.5 hrs each way from Galway"},
+{id:"tue5",short:"Tue 5",label:"Tuesday 5 August",title:"Galway to Dingle",drive:"3 hrs via Limerick"},
+{id:"wed6",short:"Wed 6",label:"Wednesday 6 August",title:"Dingle Peninsula",drive:"Slea Head loop ~30 miles"},
+{id:"thu7",short:"Thu 7",label:"Thursday 7 August",title:"Dingle to Killarney to Dublin",drive:"1.5 hrs to Killarney · 3.5 hrs to Dublin"},
+{id:"fri8",short:"Fri 8",label:"Friday 8 August",title:"Dublin to Durham",drive:"3h15 ferry + 4.5 hrs drive"},
+{id:"bookings",short:"Bookings",label:"Bookings",title:"What needs booking",drive:""},
+{id:"packing",short:"Packing",label:"Packing List",title:"What to bring",drive:"Ireland in August. Rain is guaranteed. Sun is a bonus."},
+{id:"photos",short:"📸 Map",label:"Photo Spots",title:"Photo spots on the map",drive:"All the best spots across the trip."},
+{id:"weather",short:"☁️ Weather",label:"Weather Forecast",title:"Ireland forecast",drive:"Live forecast from Open-Meteo. Updates each time you open this tab."}
+];
+
+const ITEMS={
+fri1:[
+{time:"Morning",type:"default",title:"Drive Durham to Cairnryan",desc:"A1 north, M74, A77. About 3 hours. Straightforward motorway drive.",maps:"https://www.google.com/maps/dir/Durham,+UK/Cairnryan+Ferry+Terminal",ml:"Directions"},
+{time:"Ferry",type:"ferry",title:"Cairnryan to Belfast",desc:"Stena Line, about 2 hours 15 min. Check in 45 min before. Book the Superplus lounge if you want free coffee and snacks for the crossing. Kids love watching from the deck.",web:"https://www.stenaline.co.uk/routes/cairnryan-belfast",wl:"Stena Line"},
+{time:"Afternoon",type:"default",title:"Belfast",desc:"Settle in. Titanic Quarter is brilliant for the kids if you arrive with time. Cathedral Quarter has great restaurants for dinner.",maps:"https://www.google.com/maps/search/Titanic+Belfast",ml:"Titanic Belfast"},
+{time:"Dinner",type:"default",title:"Cathedral Quarter, Belfast",desc:"Loads of family-friendly options. The Muddlers Club or Ox for something special. Coppi or Made in Belfast for casual.",maps:"https://www.google.com/maps/search/Cathedral+Quarter+Belfast",ml:"Map"}
+],
+sat2:[
+{time:"Morning",type:"default",title:"Drive Belfast to Causeway Coast",desc:"About 1.5 hours up the A2 coastal route. Spectacular drive.",maps:"https://www.google.com/maps/dir/Belfast/Giants+Causeway",ml:"Directions"},
+{time:"Mid-morning",type:"default",title:"Carrick-a-Rede Rope Bridge",desc:"Book tickets in advance. Rope bridge 30m above the sea connecting to a tiny island. The 8yr old will love it, the 4yr old might need carrying. Allow 1 hour.",maps:"https://www.google.com/maps/search/Carrick-a-Rede+Rope+Bridge",ml:"Map",web:"https://www.nationaltrust.org.uk/visit/northern-ireland/carrick-a-rede",wl:"Book tickets"},
+{time:"Late morning",type:"default",title:"Giant's Causeway",desc:"The main event. 40,000 hexagonal basalt columns. Book in advance. Allow 2-3 hours to explore properly. Audio guide is good. Shuttle bus back up the hill costs a couple of quid and saves the legs.\n\nGet down to the stones early before the coach tours arrive. August is peak season so go as early as possible.",maps:"https://www.google.com/maps/search/Giants+Causeway+Visitor+Centre",ml:"Map",web:"https://www.nationaltrust.org.uk/visit/northern-ireland/giants-causeway",wl:"NTS website"},
+{time:"📸 Photo",type:"photo",title:"Giant's Causeway",desc:"The hexagonal columns from the lower level. Go early for fewer people in shot."},
+{time:"Quick stop",type:"default",title:"Dunluce Castle",desc:"Dramatic clifftop ruin, 10 min from the Causeway. Free to view from outside, small charge to go in. 20 min stop.",maps:"https://www.google.com/maps/search/Dunluce+Castle",ml:"Map"},
+{time:"📸 Photo",type:"photo",title:"Dunluce Castle",desc:"Ruined castle perched on a cliff edge over the Atlantic."},
+{time:"Evening",type:"default",title:"Stay on the Causeway Coast",desc:"Bushmills Inn is a lovely overnight option near the Causeway. Or push on to Donegal (2.5 hrs) to shorten tomorrow's drive.",maps:"https://www.google.com/maps/search/Bushmills+Inn",ml:"Bushmills Inn"}
+],
+sun3:[
+{time:"Morning",type:"default",title:"Drive to Galway",desc:"If starting from Causeway Coast: about 4 hours via the N13/N17. If you overnighted in Donegal: about 3.5 hours.\n\nOption: stop at Slieve League cliffs in Donegal en route. Less touristy than Moher and nearly three times the height.",maps:"https://www.google.com/maps/dir/Bushmills/Galway+Ireland",ml:"Directions"},
+{time:"📸 Photo",type:"photo",title:"Slieve League Cliffs, Donegal",desc:"600m sea cliffs. Less crowded than Moher and arguably more dramatic.",maps:"https://www.google.com/maps/search/Slieve+League+Cliffs+Donegal",ml:"Map"},
+{time:"Afternoon",type:"default",title:"Arrive Galway",desc:"Settle in. Galway is a walker's city. Colourful shopfronts, street musicians everywhere, brilliant atmosphere. Wander the Latin Quarter and Shop Street.",maps:"https://www.google.com/maps/search/Eyre+Square+Galway",ml:"Map"},
+{time:"Late afternoon",type:"default",title:"Spanish Arch & The Long Walk",desc:"Medieval arch on the river. The Long Walk is a row of colourful houses along the harbour. Great for a family stroll.",maps:"https://www.google.com/maps/search/Spanish+Arch+Galway",ml:"Map"},
+{time:"📸 Photo",type:"photo",title:"The Long Walk, Galway",desc:"Colourful terraced houses along the harbour. Iconic Galway shot."},
+{time:"Dinner",type:"default",title:"Galway seafood",desc:"Ard Bia at Nimmo's is brilliant (book ahead). McDonagh's for casual fish and chips. Kai for something more special.",maps:"https://www.google.com/maps/search/Ard+Bia+Nimmos+Galway",ml:"Ard Bia"}
+],
+mon4:[
+{time:"Morning",type:"default",title:"Drive Galway to The Burren",desc:"About 45 min south. Lunar limestone landscape with wild flowers growing through the cracks. Totally unique. The Burren Centre in Kilfenora has a good exhibition.",maps:"https://www.google.com/maps/search/The+Burren+Centre+Kilfenora",ml:"Map",web:"https://www.theburrencentre.ie",wl:"Website"},
+{time:"Late morning",type:"default",title:"Cliffs of Moher",desc:"214m sheer drop into the Atlantic. One of Ireland's most visited sites. Book parking in advance in summer.\n\nArrive early (before 10am) or late afternoon to avoid the worst crowds. The cliff walk south towards Hag's Head is less busy and equally dramatic. Keep hold of the kids near the edges. August is the busiest month.",maps:"https://www.google.com/maps/search/Cliffs+of+Moher+Visitor+Centre",ml:"Map",web:"https://www.cliffsofmoher.ie",wl:"Book parking"},
+{time:"📸 Photo",type:"photo",title:"Cliffs of Moher",desc:"Best from the path south of the main viewpoint. O'Brien's Tower gives the classic angle."},
+{time:"Lunch",type:"default",title:"Doolin",desc:"Tiny village, massive reputation for traditional Irish music. Gus O'Connor's Pub or McGann's. Good pub grub, trad sessions in the evenings.",maps:"https://www.google.com/maps/search/Gus+OConnors+Pub+Doolin",ml:"Map"},
+{time:"Afternoon",type:"default",title:"Drive back to Galway",desc:"About 1.5 hours. Or if the kids have energy, stop at the Aillwee Cave & Birds of Prey Centre in the Burren.",maps:"https://www.google.com/maps/search/Aillwee+Cave+Burren",ml:"Aillwee Cave",web:"https://www.aillweecave.ie",wl:"Website"},
+{time:"Evening",type:"default",title:"Second evening in Galway",desc:"Catch a trad music session. Tigh Coili or The Crane Bar are famous for it. Family-friendly early evening."}
+],
+tue5:[
+{time:"Morning",type:"default",title:"Drive Galway to Dingle",desc:"About 3 hours via Limerick and Tralee. N18 motorway south, then N21/N86 west into Kerry.\n\nOptional stop in Limerick at King John's Castle if the kids want a break. Or push through and arrive Dingle for lunch.",maps:"https://www.google.com/maps/dir/Galway+Ireland/Dingle+Ireland",ml:"Directions"},
+{time:"Lunch",type:"default",title:"Dingle Town",desc:"Arrive and explore. Murphy's Ice Cream is a must (Dingle Sea Salt or Brown Bread flavour). Out of the Blue for serious seafood. Bean in Dingle for coffee.",maps:"https://www.google.com/maps/search/Murphys+Ice+Cream+Dingle",ml:"Murphy's Ice Cream"},
+{time:"Afternoon",type:"default",title:"Dingle Harbour & Town Walk",desc:"Colourful fishing harbour. Wander the streets, pop into craft shops. Oceanworld aquarium if the kids want it.",maps:"https://www.google.com/maps/search/Dingle+Harbour+Kerry",ml:"Map",web:"https://www.dingle-oceanworld.ie",wl:"Oceanworld"},
+{time:"📸 Photo",type:"photo",title:"Dingle Harbour",desc:"Colourful fishing boats and houses. Best light in the evening."},
+{time:"Dinner",type:"default",title:"Dingle restaurants",desc:"The Chart House is excellent (book ahead). Reel Dingle Fish for casual. Ashe's for family-friendly bar food.",maps:"https://www.google.com/maps/search/The+Chart+House+Dingle",ml:"Chart House"}
+],
+wed6:[
+{time:"All day",type:"default",title:"Slea Head Drive",desc:"One of the most beautiful coastal drives in Europe. 30 mile loop from Dingle around the tip of the peninsula and back.\n\nDo it clockwise (the official direction). Take your time. Stop constantly. The whole day is the highlight.\n\nKey stops: Dunmore Head (most westerly point of mainland Ireland), Coumeenoole Beach, Beehive Huts (Fahan), Gallarus Oratory (perfectly preserved 1,200 year old stone church).",maps:"https://www.google.com/maps/search/Slea+Head+Drive+Dingle",ml:"Map"},
+{time:"📸 Photo",type:"photo",title:"Slea Head viewpoint",desc:"Looking back towards the Blasket Islands. One of the most photographed spots in Ireland.",maps:"https://www.google.com/maps/search/Slea+Head+Dingle+Kerry",ml:"Map"},
+{time:"Beach stop",type:"default",title:"Inch Beach",desc:"Massive 5km sandy beach on the way back to Dingle. Great for the kids to run around. Sammy's cafe at the entrance does decent food.",maps:"https://www.google.com/maps/search/Inch+Beach+Kerry",ml:"Map"},
+{time:"📸 Photo",type:"photo",title:"Inch Beach",desc:"Long sandy beach stretching into the distance. Mountains behind."},
+{time:"Stop",type:"default",title:"Beehive Huts (Fahan)",desc:"Ancient stone dwellings, possibly 2,000+ years old. Small honesty box entrance fee. The kids can go inside them.",maps:"https://www.google.com/maps/search/Beehive+Huts+Fahan+Dingle",ml:"Map"},
+{time:"Stop",type:"default",title:"Gallarus Oratory",desc:"1,200 year old stone church, still completely watertight. Remarkable engineering. Free to visit (ignore the paid visitor centre, walk to it from the road).",maps:"https://www.google.com/maps/search/Gallarus+Oratory+Dingle",ml:"Map"},
+{time:"Evening",type:"default",title:"Last night in Dingle",desc:"Trad music in almost every pub. Dick Mack's is legendary. Family-friendly early evening."}
+],
+thu7:[
+{time:"Morning",type:"default",title:"Drive Dingle to Killarney",desc:"About 1.5 hours. Beautiful drive through the mountains.",maps:"https://www.google.com/maps/dir/Dingle+Ireland/Killarney+Ireland",ml:"Directions"},
+{time:"Mid-morning",type:"default",title:"Gap of Dunloe",desc:"Narrow mountain pass. You can do a boat and pony trap combo that the kids will love: jaunting car through the Gap, then boat across the three lakes back to Killarney. Book in advance.\n\nAlternatively just drive to Kate Kearney's Cottage at the entrance and walk as far as you like into the Gap.",maps:"https://www.google.com/maps/search/Gap+of+Dunloe+Killarney",ml:"Map"},
+{time:"📸 Photo",type:"photo",title:"Gap of Dunloe",desc:"Narrow mountain pass with lakes. Dramatic in any weather."},
+{time:"Lunch",type:"default",title:"Killarney town",desc:"Quick lunch before the drive east. Bricin is good for traditional Irish food.",maps:"https://www.google.com/maps/search/Bricin+Restaurant+Killarney",ml:"Map"},
+{time:"Afternoon",type:"default",title:"Drive Killarney to Dublin",desc:"About 3.5 hours via M7 motorway.\n\nWorth stopping at the Rock of Cashel (1 hr off the motorway, 45 min stop). Spectacular medieval fortress on a hilltop. Kids can run around the ruins.",maps:"https://www.google.com/maps/dir/Killarney/Dublin+Ireland",ml:"Directions"},
+{time:"Stop",type:"default",title:"Rock of Cashel",desc:"Medieval cathedral and round tower on a dramatic limestone outcrop. About 1 hour off the motorway. Worth the detour. Allow 45 min.",maps:"https://www.google.com/maps/search/Rock+of+Cashel+Tipperary",ml:"Map",web:"https://hfrockofcashel.ie",wl:"Website"},
+{time:"📸 Photo",type:"photo",title:"Rock of Cashel",desc:"Medieval fortress silhouetted on a hilltop. Best from the approach road."},
+{time:"Evening",type:"default",title:"Dublin",desc:"Arrive, settle in. Walk around Temple Bar for the atmosphere (touristy but the kids will enjoy the buzz). Or Grafton Street area for something calmer.",maps:"https://www.google.com/maps/search/Temple+Bar+Dublin",ml:"Map"}
+],
+fri8:[
+{time:"Morning",type:"ferry",title:"Dublin to Holyhead Ferry",desc:"Irish Ferries or Stena Line. About 3 hours 15 min crossing. Dublin Port is 10 min from the city centre.\n\nBook an early crossing to get home at a reasonable time. Check in 90 min before for car.",web:"https://www.irishferries.com",wl:"Irish Ferries"},
+{time:"Afternoon",type:"default",title:"Drive Holyhead to Durham",desc:"About 4.5 hours. A55 east across North Wales, M56, M6, A66 or M6/A1.\n\nThe A66 route via Penrith is prettier. The M6 is faster.",maps:"https://www.google.com/maps/dir/Holyhead/Durham+UK",ml:"Directions"},
+{time:"Pit stop",type:"default",title:"Tebay Services, M6",desc:"Farm shop, proper cooked food. Kids under 10 eat for £1 with an adult meal.",maps:"https://www.google.com/maps/search/Tebay+Services+M6",ml:"Map"},
+{time:"Evening",type:"default",title:"Home",desc:"Durham. Done. Start planning the next one."}
+]
+};
+
+const BOOKINGS=[
+{done:false,text:"Stena Line ferry Cairnryan to Belfast (Fri 1st)",extra:"book early for best price",web:"https://www.stenaline.co.uk/routes/cairnryan-belfast"},
+{done:false,text:"Belfast accommodation (1 night, Fri 1st)"},
+{done:false,text:"Causeway Coast accommodation (1 night, Sat 2nd)",extra:"Bushmills Inn or similar"},
+{done:false,text:"Giant's Causeway tickets",web:"https://www.nationaltrust.org.uk/visit/northern-ireland/giants-causeway"},
+{done:false,text:"Carrick-a-Rede Rope Bridge tickets",web:"https://www.nationaltrust.org.uk/visit/northern-ireland/carrick-a-rede"},
+{done:false,text:"Galway accommodation (2 nights, Sun 3rd & Mon 4th)"},
+{done:false,text:"Cliffs of Moher parking",web:"https://www.cliffsofmoher.ie"},
+{done:false,text:"Dingle accommodation (2 nights, Tue 5th & Wed 6th)"},
+{done:false,text:"Gap of Dunloe boat/pony trap combo",extra:"book well ahead in summer"},
+{done:false,text:"Dublin accommodation (1 night, Thu 7th)"},
+{done:false,text:"Irish Ferries or Stena Line Dublin to Holyhead (Fri 8th)",extra:"book early",web:"https://www.irishferries.com"},
+{done:false,text:"Restaurant bookings: Ard Bia Galway, Chart House Dingle"}
+];
+
+const PACKING=[
+{cat:"Rain gear (non-negotiable)",items:["Waterproof jackets for all four of you","Waterproof trousers for the kids","Compact umbrella"]},
+{cat:"Layers",items:["Fleeces or hoodies","T-shirts and light long sleeves","One warm jumper each for evenings","Jeans/trousers and shorts (bring both)"]},
+{cat:"Footwear",items:["Walking boots or sturdy trainers","Wellies for the kids (beaches, rock pools)","Sandals or flip flops for warm days","Evening shoes for restaurants"]},
+{cat:"Beach and outdoors",items:["Bucket and spade","Net for rock pools","Reusable water bottles","Small backpack/daypack for walks","Picnic blanket","Sun cream (yes, even in Ireland)","Sunglasses"]},
+{cat:"Car journey",items:["Tablet/iPad loaded with films","Headphones for kids","Chargers and in-car USB cables","Colouring books, stickers, small toys","Snacks","Sick bags (winding coastal roads)","Travel pillow for the 4yr old"]},
+{cat:"Currency",items:["Euro for Republic of Ireland (everything south of the border)","Sterling for Northern Ireland (Belfast, Causeway Coast)","Most places take card but bring cash for honesty boxes and small cafes"]},
+{cat:"Essentials",items:["First aid kit (plasters, Calpol, antihistamine)","Midge/insect repellent","Baby wipes","Phone chargers and portable battery","Camera or make sure phones have space"]},
+{cat:"Nice to have",items:["Binoculars (seals, dolphins, puffins in August)","Wildlife ID book or app for the kids"]}
+];
+
+const PHOTO_SPOTS=[
+{name:"Giant's Causeway",day:"Sat",desc:"Hexagonal basalt columns. Go early for fewer people.",lat:55.2408,lng:-6.5116,maps:"https://www.google.com/maps/search/Giants+Causeway"},
+{name:"Dunluce Castle",day:"Sat",desc:"Clifftop ruin over the Atlantic.",lat:55.2106,lng:-6.5792,maps:"https://www.google.com/maps/search/Dunluce+Castle"},
+{name:"Slieve League Cliffs",day:"Sun",desc:"600m sea cliffs, Donegal. Less crowded than Moher.",lat:54.6367,lng:-8.6819,maps:"https://www.google.com/maps/search/Slieve+League+Cliffs+Donegal"},
+{name:"The Long Walk, Galway",day:"Sun",desc:"Colourful terraced houses along the harbour.",lat:53.2692,lng:-9.0494,maps:"https://www.google.com/maps/search/The+Long+Walk+Galway"},
+{name:"Cliffs of Moher",day:"Mon",desc:"214m sea cliffs. Best from the path south of O'Brien's Tower.",lat:52.9715,lng:-9.4309,maps:"https://www.google.com/maps/search/Cliffs+of+Moher"},
+{name:"Dingle Harbour",day:"Tue",desc:"Colourful fishing boats and houses. Best in evening light.",lat:52.1409,lng:-10.2671,maps:"https://www.google.com/maps/search/Dingle+Harbour"},
+{name:"Slea Head",day:"Wed",desc:"Looking back towards the Blasket Islands.",lat:52.0975,lng:-10.4569,maps:"https://www.google.com/maps/search/Slea+Head+Dingle"},
+{name:"Inch Beach",day:"Wed",desc:"5km sandy beach with mountains behind.",lat:52.1306,lng:-9.9806,maps:"https://www.google.com/maps/search/Inch+Beach+Kerry"},
+{name:"Gap of Dunloe",day:"Thu",desc:"Narrow mountain pass with lakes.",lat:51.9833,lng:-9.6500,maps:"https://www.google.com/maps/search/Gap+of+Dunloe+Killarney"},
+{name:"Rock of Cashel",day:"Thu",desc:"Medieval fortress silhouetted on a hilltop.",lat:52.5200,lng:-7.8903,maps:"https://www.google.com/maps/search/Rock+of+Cashel+Tipperary"}
+];
+
+const mapSvg='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>';
+
+// Countdown
+(function(){
+  const start=new Date(TRIP_START+"T00:00:00");
+  const end=new Date(TRIP_END+"T23:59:59");
+  const el=document.getElementById("countdown");
+  function update(){
+    const now=new Date();
+    if(now>=start&&now<=end){el.textContent="You're on this trip right now! 🇮🇪";el.style.color="#B85C3A";return;}
+    if(now>end){el.textContent="Trip complete ✓";el.style.color="#999";return;}
+    const days=Math.ceil((start-now)/(1000*60*60*24));
+    el.textContent=days+" day"+(days===1?"":"s")+" to go!";
+  }
+  update();
+  setInterval(update,60000);
+})();
+
+let active="fri1";
+
+function renderNav(){
+  const nav=document.getElementById("nav");
+  nav.innerHTML=DAYS.map(d=>`<button class="${d.id===active?'active':''}" data-id="${d.id}">${d.short}</button>`).join("");
+  nav.querySelectorAll("button").forEach(b=>b.onclick=()=>{active=b.dataset.id;renderNav();renderContent();window.scrollTo(0,0)});
+}
+
+function btn(href,cls,label,isPhone){
+  return `<a class="btn ${cls}" href="${isPhone?'tel:'+href:href}" ${isPhone?'':'target="_blank" rel="noopener"'}>${label}</a>`;
+}
+
+function renderCard(item){
+  const bc={default:"badge-default",ferry:"badge-ferry",booked:"badge-booked",photo:"badge-photo",dashed:"badge-default"}[item.type]||"badge-default";
+  const cc=item.type==="photo"?"photo":item.type==="dashed"?"dashed":"";
+  const paras=item.desc?item.desc.split("\n\n").map(p=>`<p>${p}</p>`).join(""):"";
+  const bk=item.booked?'<span class="booked-tag">Booked</span>':"";
+  const bl=item.bookLabel?`<span class="booked-tag">${item.bookLabel}</span>`:"";
+  let links="";
+  if(item.maps) links+=btn(item.maps,"btn-map",mapSvg+" "+(item.ml||"Map"));
+  if(item.web) links+=btn(item.web,"btn-web",item.wl||"Website");
+  if(item.phone) links+=btn(item.phone,"btn-phone","📞 "+(item.pl||item.phone),!0);
+  return `<div class="card ${cc}"><span class="badge ${bc}">${item.time}</span><h3>${item.title}${bk}${bl}</h3>${paras}${links?'<div class="links">'+links+'</div>':''}</div>`;
+}
+
+function renderList(data,warn){
+  return data.map(s=>{
+    const isWarn=warn&&s.cat.startsWith("Don't");
+    const items=s.items.map(i=>`<div class="list-item"><span class="dot">○</span><span>${i}</span></div>`).join("");
+    return `<div class="list-card ${isWarn?'warn':''}"><h3 style="${isWarn?'color:#B85C3A':''}">${s.cat}</h3>${items}</div>`;
+  }).join("");
+}
+
+function renderContent(){
+  const day=DAYS.find(d=>d.id===active);
+  let html=`<div class="day-head"><div class="day-label">${day.label}</div><div class="day-title">${day.title}</div>${day.drive?'<div class="day-drive">'+day.drive+'</div>':''}</div>`;
+
+  if(active==="bookings"){
+    html+=BOOKINGS.map(b=>{
+      let extra=b.extra?` — ${b.extra}`:"";
+      let links="";
+      if(b.web) links+=btn(b.web,"btn-web","Website");
+      if(b.phone) links+=btn(b.phone,"btn-phone","📞 "+b.phone,!0);
+      return `<div class="check-item"><span style="font-weight:700;color:${b.done?'#2E6B5A':'#B85C3A'}">${b.done?'✓':'!'}</span><div>${b.text}${extra}${links?'<div class="links" style="margin-top:6px">'+links+'</div>':''}</div></div>`;
+    }).join("");
+  } else if(active==="packing"){
+    html+=renderList(PACKING,!1);
+  } else if(active==="photos"){
+    html+=`<div class="card" style="padding:0;overflow:hidden;border-radius:12px;margin-bottom:16px">
+      <iframe width="100%" height="320" frameborder="0" scrolling="no" style="display:block;border:0;border-radius:12px" src="https://www.openstreetmap.org/export/embed.html?bbox=-11.5%2C51.5%2C-5.5%2C55.8&layer=mapnik" loading="lazy"></iframe>
+      <div style="padding:12px 16px;font-size:12px;color:#888">Scroll down for all spots with Google Maps links.</div>
+    </div>`;
+    const dayColors={Sat:"#2E6B5A",Sun:"#C47A2A",Mon:"#5B6AAF",Tue:"#B85C3A",Wed:"#8B5E3C",Thu:"#6B2E5A"};
+    PHOTO_SPOTS.forEach((s,i)=>{
+      const col=dayColors[s.day]||"#2E6B5A";
+      html+=`<div class="card photo" style="border-left-color:${col}">
+        <span class="badge" style="background:${col}15;color:${col}">${s.day} · Spot ${i+1}</span>
+        <h3>${s.name}</h3>
+        <p>${s.desc}</p>
+        <div class="links">
+          <a class="btn btn-map" href="${s.maps}" target="_blank" rel="noopener">${mapSvg} Open in Maps</a>
+        </div>
+      </div>`;
+    });
+  } else if(active==="weather"){
+    html+=`<div id="weather-loading" class="card" style="text-align:center;padding:24px;color:#888">Loading forecast...</div>`;
+    setTimeout(loadWeather,50);
+  } else {
+    html+=(ITEMS[active]||[]).map(renderCard).join("");
+  }
+
+  document.getElementById("content").innerHTML=html;
+}
+
+const WMO_CODES={0:"☀️ Clear",1:"🌤 Mostly clear",2:"⛅ Partly cloudy",3:"☁️ Overcast",45:"🌫 Foggy",48:"🌫 Rime fog",51:"🌦 Light drizzle",53:"🌦 Drizzle",55:"🌧 Heavy drizzle",61:"🌧 Light rain",63:"🌧 Rain",65:"🌧 Heavy rain",80:"🌦 Light showers",81:"🌧 Showers",82:"🌧 Heavy showers",95:"⛈ Thunderstorm"};
+
+const WEATHER_LOCATIONS=[
+  {name:"Belfast / Causeway Coast",lat:55.24,lng:-6.51},
+  {name:"Galway",lat:53.27,lng:-9.05},
+  {name:"Dingle, Kerry",lat:52.14,lng:-10.27},
+  {name:"Dublin",lat:53.35,lng:-6.26}
+];
+
+async function loadWeather(){
+  const container=document.getElementById("weather-loading");
+  if(!container) return;
+
+  const now=new Date();
+  const start=new Date(TRIP_START+"T00:00:00");
+  const diff=Math.ceil((start-now)/(1000*60*60*24));
+
+  if(diff>16){
+    container.outerHTML=`
+      <div class="card" style="text-align:center;padding:20px">
+        <div style="font-size:36px;margin-bottom:8px">🌦</div>
+        <h3 style="margin-bottom:6px">Forecast not available yet</h3>
+        <p>Open-Meteo provides forecasts up to 16 days ahead. Check back from <strong>${formatCountdownDate(start,16)}</strong>.</p>
+        <div style="margin-top:16px;padding:16px;background:#F9F8F6;border-radius:10px;text-align:left">
+          <h3 style="font-size:14px;margin-bottom:8px">What to expect in August</h3>
+          <p style="font-size:13px;color:#666">Ireland in August: highs around 16-20°C, lows 11-14°C. Mix of sunshine and showers, often in the same hour. West coast (Galway, Dingle) gets more rain than the east (Dublin, Belfast). Light until about 9pm. Pack for all of it.</p>
+        </div>
+      </div>`;
+    return;
+  }
+
+  try{
+    let allHtml='';
+    for(const loc of WEATHER_LOCATIONS){
+      const url=`https://api.open-meteo.com/v1/forecast?latitude=${loc.lat}&longitude=${loc.lng}&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_probability_max,windspeed_10m_max&start_date=${TRIP_START}&end_date=${TRIP_END}&timezone=Europe/London`;
+      const res=await fetch(url);
+      const data=await res.json();
+      if(!data.daily) continue;
+
+      allHtml+=`<div class="card" style="padding:12px 16px">
+        <span class="badge badge-default">${loc.name}</span>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">`;
+
+      const dates=data.daily.time;
+      const codes=data.daily.weathercode;
+      const highs=data.daily.temperature_2m_max;
+      const lows=data.daily.temperature_2m_min;
+      const rain=data.daily.precipitation_probability_max;
+      const wind=data.daily.windspeed_10m_max;
+      const dayNames=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+
+      dates.forEach((d,i)=>{
+        const dt=new Date(d+"T12:00:00");
+        const dayStr=dayNames[dt.getDay()]+" "+dt.getDate();
+        const weather=WMO_CODES[codes[i]]||"Unknown";
+        const rainPct=rain[i]||0;
+        const rainBar=rainPct>0?`<div style="width:${Math.max(rainPct,8)}%;height:4px;background:${rainPct>50?'#5B6AAF':'#B8C4E0'};border-radius:2px;margin-top:2px"></div>`:'';
+
+        allHtml+=`<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #F0EDE8">
+          <div style="min-width:52px;font-size:13px;font-weight:700;color:#555">${dayStr}</div>
+          <div style="flex:1">
+            <div style="font-size:14px">${weather}</div>
+            <div style="font-size:12px;color:#999">${rainPct}% rain · ${Math.round(wind[i])} km/h wind</div>
+            ${rainBar}
+          </div>
+          <div style="text-align:right;min-width:55px">
+            <span style="font-size:15px;font-weight:700">${Math.round(highs[i])}°</span>
+            <span style="font-size:13px;color:#999"> ${Math.round(lows[i])}°</span>
+          </div>
+        </div>`;
+      });
+      allHtml+=`</div></div>`;
+    }
+
+    allHtml+=`<div class="card dashed" style="text-align:center;padding:16px;font-size:12px;color:#999">
+      Forecast from <a href="https://open-meteo.com" target="_blank" rel="noopener" style="color:#2E6B5A">Open-Meteo</a>. Updates every time you open this tab.
+    </div>`;
+    container.outerHTML=allHtml;
+  }catch(e){
+    container.outerHTML=`<div class="card" style="text-align:center;padding:20px">
+      <div style="font-size:36px;margin-bottom:8px">📡</div>
+      <h3>Couldn't load forecast</h3>
+      <p>You might be offline. Try again when you have signal.</p>
+    </div>`;
+  }
+}
+
+function formatCountdownDate(tripDate,daysBefore){
+  const d=new Date(tripDate);
+  d.setDate(d.getDate()-daysBefore);
+  return d.toLocaleDateString('en-GB',{day:'numeric',month:'long'});
+}
+
+renderNav();
+renderContent();
+
+if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js').catch(()=>{});}
+</script>
+</body>
+</html>
