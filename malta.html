@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#C47A2A">
+<title>Malta | 20-29 July 2026</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#F7F5F2;color:#2C2C2C;line-height:1.55;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+a{color:inherit}
+.back{display:inline-flex;align-items:center;gap:4px;font-size:13px;font-weight:600;color:#C47A2A;text-decoration:none;padding:16px 20px 0}
+.back:active{opacity:.6}
+.countdown-banner{text-align:center;padding:8px 20px 0;font-size:13px;font-weight:700;color:#C47A2A}
+.header{padding:16px 20px 14px;text-align:center}
+.header h1{font-family:Georgia,serif;font-size:28px;font-weight:400;letter-spacing:-.5px;margin-bottom:4px}
+.header .sub{font-size:14px;color:#7A7A7A;font-weight:500}
+.nav{position:sticky;top:0;z-index:100;background:#F7F5F2;border-bottom:1px solid #E8E5E0;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:10px 16px;display:flex;gap:8px}
+.nav::-webkit-scrollbar{display:none}
+.nav button{flex-shrink:0;padding:6px 14px;border-radius:20px;font-size:13px;font-weight:600;border:1px solid #E8E5E0;background:#FFF;color:#7A7A7A;cursor:pointer;white-space:nowrap;font-family:inherit;transition:all .15s}
+.nav button.active{background:#C47A2A;color:#FFF;border-color:#C47A2A}
+.content{padding:0 16px;max-width:540px;margin:0 auto;padding-bottom:80px}
+.day-head{padding:20px 0 12px}
+.day-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#C47A2A;margin-bottom:2px}
+.day-title{font-family:Georgia,serif;font-size:22px;font-weight:400}
+.day-sub{font-size:13px;color:#7A7A7A;margin-top:4px}
+.card{background:#FFF;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.06);padding:16px;margin-bottom:10px}
+.card.photo{border-left:3px solid #5B6AAF}
+.card.dashed{background:#F9F8F6;border:1px dashed #E8E5E0;box-shadow:none}
+.card.date-card{border-left:3px solid #7B2E8B}
+.badge{display:inline-block;font-size:12px;font-weight:700;padding:3px 10px;border-radius:6px;margin-bottom:8px}
+.b-time{background:#FDF3E7;color:#C47A2A}
+.b-ferry{background:#E8F0ED;color:#2E6B5A}
+.b-photo{background:#EEEEF8;color:#5B6AAF}
+.b-date{background:#F3E8F5;color:#7B2E8B}
+.card h3{font-size:16px;font-weight:700;margin-bottom:6px;line-height:1.3}
+.card p{font-size:14px;color:#555;margin-bottom:8px}
+.card p:last-child{margin-bottom:0}
+.links{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.btn{display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:600;text-decoration:none;padding:6px 12px;border-radius:8px}
+.btn:active{opacity:.7}
+.btn-map{color:#2E6B5A;background:#E8F0ED}
+.btn-web{color:#C47A2A;background:#FDF3E7}
+.list-card{background:#FFF;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.06);padding:16px;margin-bottom:10px}
+.list-card h3{font-size:15px;font-weight:700;margin-bottom:10px}
+.list-item{display:flex;align-items:flex-start;gap:8px;padding:4px 0;font-size:14px;color:#555}
+.list-item .dot{color:#CCC;font-size:16px;line-height:1}
+.booking-row{display:flex;align-items:flex-start;gap:10px;padding:12px 0;border-bottom:1px solid #E8E5E0;font-size:14px}
+.booking-row:last-child{border-bottom:none}
+.booking-row .status{font-weight:700;font-size:16px;flex-shrink:0}
+.booking-row .extra{font-size:12px;color:#888;margin-top:2px}
+.weather-card{background:#FFF;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.06);padding:16px;margin-bottom:10px}
+.wx-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #F0EDE8;font-size:14px}
+.wx-row:last-child{border-bottom:none}
+.wx-day{font-weight:600;width:50px}
+.wx-icon{flex:1}
+.wx-temps{text-align:right;white-space:nowrap}
+.wx-hi{font-weight:700}
+.wx-lo{color:#999}
+@media(min-width:600px){.content{max-width:540px}.nav{justify-content:center}}
+</style>
+</head>
+<body>
+<a class="back" href="./">\u2190 All trips</a>
+<div class="countdown-banner" id="countdown"></div>
+<div class="header">
+  <h1>Malta \u2600\ufe0f</h1>
+  <div class="sub">20 - 29 July 2026 \u00b7 AX Odycy, Qawra</div>
+</div>
+<nav class="nav" id="nav"></nav>
+<div class="content" id="content"></div>
+<script>
+const TRIP_START="2026-07-20";
+const TRIP_END="2026-07-29";
+
+const TABS=[
+{id:"mon20",label:"Mon 20"},{id:"tue21",label:"Tue 21"},{id:"wed22",label:"Wed 22"},
+{id:"thu23",label:"Thu 23"},{id:"fri24",label:"Fri 24"},{id:"sat25",label:"Sat 25"},
+{id:"sun26",label:"Sun 26"},{id:"mon27",label:"Mon 27"},{id:"tue28",label:"Tue 28"},
+{id:"wed29",label:"Wed 29"},
+{id:"bookings",label:"Bookings"},{id:"packing",label:"Packing"},
+{id:"photos",label:"\ud83d\udcf8 Spots"},{id:"weather",label:"\u2601\ufe0f Weather"}
+];
+
+const DAYS={
+mon20:{dayLabel:"Monday 20 July",title:"Arrive & Sleep",sub:"~3 hrs flight from UK"},
+tue21:{dayLabel:"Tuesday 21 July",title:"Hotel Day",sub:"Pool, waterslides, settle in"},
+wed22:{dayLabel:"Wednesday 22 July",title:"Valletta & Three Cities",sub:"30 min Bolt from Qawra"},
+thu23:{dayLabel:"Thursday 23 July",title:"Popeye Village",sub:"20 min Bolt \u00b7 Grandmas arrive late"},
+fri24:{dayLabel:"Friday 24 July",title:"Chill Day with Grandmas",sub:"Hotel day \u00b7 Simon + Hannah out tonight"},
+sat25:{dayLabel:"Saturday 25 July",title:"Hannah & Grandmas Day Out",sub:"Simon has the kids at the hotel"},
+sun26:{dayLabel:"Sunday 26 July",title:"Gozo Day Trip",sub:"25 min ferry \u00b7 Simon + Hannah out tonight"},
+mon27:{dayLabel:"Monday 27 July",title:"South Coast & Aquarium",sub:"Family trip \u00b7 Hannah + Sue out tonight"},
+tue28:{dayLabel:"Tuesday 28 July",title:"Last Full Day",sub:"Hotel day \u00b7 Simon + Jennifer lunch"},
+wed29:{dayLabel:"Wednesday 29 July",title:"Fly Home",sub:""},
+bookings:{dayLabel:"Bookings",title:"What Needs Booking",sub:""},
+packing:{dayLabel:"Packing List",title:"What to Bring",sub:"Malta in July: 32\u00b0C+, relentless sunshine, virtually no rain."},
+photos:{dayLabel:"Photo Spots",title:"Best Photo Spots",sub:""},
+weather:{dayLabel:"Weather",title:"Malta Forecast",sub:"Live forecast from Open-Meteo"}
+};
+
+function C(time,type,title,desc,opts){return{time,type,title,desc,maps:opts?.maps,ml:opts?.ml,web:opts?.web,wl:opts?.wl};}
+
+const ITEMS={
+mon20:[
+C("Flight","time","Fly to Malta","About 3 hours from most UK airports. Direct flights on easyJet, Ryanair, KM Malta Airlines, BA. Malta International Airport (Luqa) is tiny and central.",{web:"https://www.skyscanner.net/transport/flights/uk/mla/",wl:"Search flights"}),
+C("Transfer","time","Airport to AX Odycy","About 25 min from Luqa airport. Pre-book a transfer with car seats via Welcome Pickups or just grab a Bolt (about \u20ac15-20).",{web:"https://www.welcomepickups.com/malta/",wl:"Welcome Pickups"}),
+C("Evening","time","Settle in & sleep","Unpack, quick look around the hotel. Dinner at Deck & Keel buffet (all-inclusive). Early night.")
+],
+tue21:[
+C("All day","time","Hotel day","First proper day. Take it easy. The kids will want to hit the pool immediately.\n\nThe family pool has two waterslides and a kids' water play area. Indoor pool for when you need shade. Adults-only rooftop pool with hot tubs for when the kids are napping.\n\nExplore the hotel: 5 restaurants, pool bars, gym, spa. Get your bearings.",{maps:"https://www.google.com/maps/search/AX+Odycy+Hotel+Qawra+Malta",ml:"Hotel map"}),
+C("Lunch","time","All-inclusive lunch","Deck & Keel buffet or Trattoria Riccardo (Italian, play area for kids). Both included."),
+C("Afternoon","time","Local walk","Walk along the Qawra promenade towards Bugibba (15 min). Find gelato. Nice in the early evening when it cools down. Locate a pharmacy and any basics you forgot to pack.",{maps:"https://www.google.com/maps/search/Qawra+Promenade+Malta",ml:"Promenade"}),
+C("Dinner","time","Hotel dinner","All-inclusive. Deck & Keel buffet has themed nights, or try Cheeky Monkey Gastropub.")
+],
+wed22:[
+C("Morning","time","Bolt to Valletta","30 min from Qawra. Get dropped at City Gate. Malta's capital is a UNESCO World Heritage Site crammed into a tiny peninsula. Largely pedestrianised, easy to walk with kids.\n\nStart at City Gate and walk down Republic Street. Coffee at Caffe Cordina.",{maps:"https://www.google.com/maps/search/Valletta+City+Gate+Malta",ml:"City Gate"}),
+C("Mid-morning","time","Upper Barrakka Gardens","Stunning viewpoint over the Grand Harbour. Free entry. The Saluting Battery fires a cannon at noon and 4pm daily. Kids love it. Get there before noon.",{maps:"https://www.google.com/maps/search/Upper+Barrakka+Gardens+Valletta",ml:"Gardens"}),
+C("\ud83d\udcf8 Photo","photo","Upper Barrakka Gardens","Grand Harbour panorama with the Three Cities across the water. Best light in the morning."),
+C("Late morning","time","St John's Co-Cathedral","One of the most ornate church interiors in Europe. Caravaggio masterpiece inside. About \u20ac15 adults, kids free under 12. Allow 45 min. Book tickets in advance.",{maps:"https://www.google.com/maps/search/St+Johns+Co-Cathedral+Valletta",ml:"Map",web:"https://stjohnscocathedral.com",wl:"Book tickets"}),
+C("Lunch","time","Lunch in Valletta","Noni for something special. Legligin for wine bar vibes. Or grab pastizzi from a street vendor for about 50c each."),
+C("Afternoon","ferry","Dghajsa to the Three Cities","Traditional water taxi from Valletta to Birgu (Vittoriosa). About \u20ac2 each way, 5 min. Scenic and fun.\n\nWander the narrow golden streets of Birgu. Less touristy than Valletta, just as beautiful. Fort St Angelo at the tip.",{maps:"https://www.google.com/maps/search/Birgu+Vittoriosa+Malta",ml:"Birgu"}),
+C("\ud83d\udcf8 Photo","photo","Birgu waterfront","Colourful luzzu boats in the harbour with Valletta behind."),
+C("Late afternoon","time","Bolt home","Bolt back to Qawra from Birgu (about 20 min, \u20ac12-15). Dinner at the hotel.")
+],
+thu23:[
+C("Morning","time","Popeye Village","Bolt there (20 min from Qawra). The original film set from the 1980 Robin Williams movie, now a family theme park on Anchor Bay.\n\nSwimming, boat rides, shows, characters. The kids will love it. Allow 2-3 hours. Opens 9:30am, go early before the heat.\n\nAbout \u20ac19 adults, \u20ac15 kids in summer. Book online for a discount.",{maps:"https://www.google.com/maps/search/Popeye+Village+Malta",ml:"Map",web:"https://popeyemalta.com",wl:"Book tickets"}),
+C("\ud83d\udcf8 Photo","photo","Popeye Village","Colourful wooden film set on Anchor Bay. Best from the viewpoint above before you go in."),
+C("Lunch","time","Bolt home for lunch","Back to the hotel. All-inclusive lunch. Pool afternoon."),
+C("Afternoon","time","Pool or Aquarium","Slides, splash area, relax. Or: Malta National Aquarium is a 10 min walk from the hotel. 51 tanks, walk-through tunnel, outdoor play area. About \u20ac14 adults, \u20ac7 kids. Air-conditioned.",{maps:"https://www.google.com/maps/search/Malta+National+Aquarium+Qawra",ml:"Aquarium",web:"https://www.aquarium.com.mt",wl:"Website"}),
+C("Evening","time","Grandmas arrive","Sue and Jennifer arrive late. Help them settle in. Quick drink together. Dinner at Trattoria Riccardo (play area, air-conditioned).")
+],
+fri24:[
+C("All day","time","Hotel day with the grandmas","First full day together. Take it easy. Pool, waterslides, rooftop adults-only pool for the grandmas (hot tubs, sea views, no kids). Indoor pool for shade.\n\nPoint the grandmas at the spa if they fancy a treatment. All-inclusive takes care of everything today."),
+C("Tip","dashed","Restaurants with play areas","Luzzu and Trattoria Riccardo both have kids' play areas. Good for family dinners where the kids can run off."),
+C("\ud83c\udf77 Evening","date","Simon + Hannah night out #1","Grandmas watch the kids at the hotel.\n\nOption A: Minoa \u2014 rooftop restaurant at the Odycy. Adults-only, Mediterranean fusion, sea views. Zero travel.\n\nOption B: Ta' Marija, Mosta \u2014 traditional Maltese restaurant with folklore show some nights. 20 min Bolt.\n\nOption C: Bugibba promenade \u2014 15 min walk. Loads of choices, casual seafront vibe.",{maps:"https://www.google.com/maps/search/restaurants+Bugibba+promenade+Malta",ml:"Bugibba restaurants"})
+],
+sat25:[
+C("Morning","time","Hannah takes the grandmas out","Simon has the kids at the hotel (pool day). Three options for Hannah, Sue, and Jennifer:"),
+C("Option A","time","Valletta harbour cruise + walk","Bolt to Sliema (20 min). 90-min harbour cruise around the Grand Harbour and Three Cities (\u20ac15pp, seated, commentary, gentle, breezy). Then walk around Valletta, lunch somewhere nice, Bolt home. Half-day, not strenuous.\n\nBook with iSeeMalta or Luzzu Cruises.",{web:"https://www.isee.com.mt",wl:"iSeeMalta"}),
+C("Option B","time","Private tour: Mdina, Mosta & Rabat","Book via Viator or GetYourGuide (about \u20ac100-150 for three). Guide picks them up, air-conditioned car. Mosta Dome, Mdina walking tour, cake at Fontanella Tea Garden, Crystal Palace pastizzi in Rabat. Back by 1pm.",{web:"https://www.viator.com/tours/Valletta/Half-Day-Malta-Highlights/d4142-14003P4",wl:"Book on Viator"}),
+C("Option C","time","Three Cities guided tour with boat","Half-day organised tour of Birgu/Vittoriosa/Senglea with a traditional dghajsa boat ride through the harbour creeks. About 4 hours, moderate walking, shade in the narrow streets.",{web:"https://www.viator.com/tours/Valletta/Vittoriosa-Cospucia-and-Senglea-Guided-Tour-Incl-Boat-Tour-of-Harbour-Creeks/d4142-6089P33",wl:"Book on Viator"}),
+C("Afternoon","time","Everyone back at the hotel","Pool, drinks, relax. All-inclusive dinner together.")
+],
+sun26:[
+C("Early morning","ferry","Bolt to \u010airkewwa, ferry to Gozo","Everyone up early. Bolt to ferry terminal (20 min). Ferry 25 min, runs every 45 min. Pay on return only (~\u20ac5 per adult, kids under 3 free).\n\nAim for the 7:30 or 8:00am ferry to beat the heat.",{maps:"https://www.google.com/maps/search/Cirkewwa+Ferry+Terminal+Malta",ml:"Ferry terminal",web:"https://www.gozochannel.com",wl:"Timetable"}),
+C("Morning","time","\u0120gantija Temples","UNESCO World Heritage Site. Oldest freestanding stone structures in the world, older than Stonehenge and the Pyramids. About 5,500 years old.\n\nSmall museum on site. Allow 1 hour. Little shade so go early. About \u20ac9 adults, \u20ac5 kids. Bolt from Mgarr harbour (15 min).",{maps:"https://www.google.com/maps/search/Ggantija+Temples+Xaghra+Gozo",ml:"Map",web:"https://heritagemalta.mt/explore/ggantija-temples/",wl:"Heritage Malta"}),
+C("\ud83d\udcf8 Photo","photo","\u0120gantija Temples","Ancient megalithic temples. The scale of the stones is remarkable."),
+C("Mid-morning","time","Victoria & The Citadel","Gozo's capital. The Citadel is a fortified medieval hilltop town with 360\u00b0 views.\n\nCathedral (free), walk the ramparts. Kids can run around the walls. Fontanella Tea Garden on the walls has views and cake. Grandmas will love this. Mostly shade.",{maps:"https://www.google.com/maps/search/The+Citadel+Victoria+Gozo",ml:"The Citadel"}),
+C("\ud83d\udcf8 Photo","photo","The Citadel, Victoria","Panoramic views over Gozo from the fortress walls."),
+C("Lunch","time","Lunch in Victoria","Ta' Rikardu in the Citadel \u2014 traditional Gozitan food, they make their own wine and cheese. Or walk down into Victoria for more options.",{maps:"https://www.google.com/maps/search/Ta+Rikardu+Citadel+Gozo",ml:"Ta' Rikardu"}),
+C("Afternoon","time","Ramla Bay","Gozo's best beach. Orange-red sand, shallow warm water, less crowded than Malta's beaches. Lifeguards in summer. Kiosks, sunbed hire.\n\nTal-Mixta Cave above the beach has an amazing natural window view down to the bay. Short walk up.",{maps:"https://www.google.com/maps/search/Ramla+Bay+Beach+Gozo",ml:"Ramla Bay"}),
+C("\ud83d\udcf8 Photo","photo","Ramla Bay from Tal-Mixta Cave","Orange sand beach framed by a cave opening. One of the most photographed views in Gozo."),
+C("Late afternoon","ferry","Ferry back to Malta","Bolt to Mgarr harbour. Ferry back. Bolt to hotel. Everyone will be tired."),
+C("\ud83c\udf77 Evening","date","Simon + Hannah night out #2","Grandmas watch the kids.\n\nOption A: de Mondion, Mdina \u2014 fine dining at The Xara Palace on the bastion walls. Mdina at night is magical, day trippers are gone. 20 min Bolt. This is the special one.\n\nOption B: Gululu, St Julian's \u2014 harbour-side, good seafood, more casual. 15 min Bolt.\n\nOption C: Valletta Waterfront \u2014 pick a restaurant with Grand Harbour views. 30 min Bolt.",{maps:"https://www.google.com/maps/search/de+Mondion+Xara+Palace+Mdina+Malta",ml:"de Mondion"})
+],
+mon27:[
+C("Morning","time","Blue Grotto","Bolt to Wied i\u017c-\u017burrieq (40 min from Qawra). Sea caves with electric blue water. Boat trip about \u20ac8pp, 20 min. Best before 1pm when the sun lights up the water.\n\nSmall boats, about 8 people per boat. The viewpoint above the harbour is stunning even from land. Grandmas might prefer the viewpoint.",{maps:"https://www.google.com/maps/search/Blue+Grotto+Malta",ml:"Map"}),
+C("\ud83d\udcf8 Photo","photo","Blue Grotto","Sea caves lit electric blue by sunlight. Best from the boat, but the clifftop viewpoint is great too."),
+C("Lunch","time","Marsaxlokk","10 min Bolt from Blue Grotto. Traditional fishing village. Famous for the colourful luzzu fishing boats with painted eyes.\n\nFresh fish restaurants line the harbour. Pick somewhere with a view. Good for the grandmas \u2014 flat, shady, relaxed.",{maps:"https://www.google.com/maps/search/Marsaxlokk+Malta",ml:"Map"}),
+C("\ud83d\udcf8 Photo","photo","Marsaxlokk harbour","Colourful painted luzzu fishing boats. Iconic Malta shot."),
+C("Afternoon","time","Malta National Aquarium","Bolt back to Qawra (30 min). 10 min walk from hotel. 51 tanks, 250+ species, walk-through tunnel. Outdoor pirate play area.\n\nAbout \u20ac14 adults, \u20ac7 kids. Air-conditioned. Perfect for the hottest part of the afternoon.",{maps:"https://www.google.com/maps/search/Malta+National+Aquarium+Qawra",ml:"Map",web:"https://www.aquarium.com.mt",wl:"Website"}),
+C("\ud83c\udf77 Evening","date","Hannah + Sue evening out","Simon and Jennifer watch the kids.\n\nOption A: Minoa rooftop at the Odycy \u2014 adults-only, sea views, no travel.\n\nOption B: Valletta Waterfront \u2014 Bolt there, harbour views. Special evening.\n\nOption C: Sliema promenade \u2014 plenty of restaurants, 20 min Bolt.")
+],
+tue28:[
+C("All day","time","Last full day \u2014 hotel day","No rushing anywhere. Pool, waterslides, rooftop hot tubs for the grandmas. Indoor pool if anyone's had enough sun. Let the kids have one last big pool day."),
+C("\ud83c\udf7d Lunch","date","Simon + Jennifer lunch","Hannah and Sue watch the kids.\n\nOption A: Cheeky Monkey Gastropub at the hotel \u2014 fun, hearty food, no travel.\n\nOption B: Bugibba waterfront \u2014 15 min walk, pick a spot with a sea view.\n\nOption C: A restaurant in Qawra \u2014 keep it relaxed."),
+C("Afternoon","time","Pack","Start packing. Especially the kids' stuff. Sort out any last souvenirs."),
+C("Evening","time","Last family dinner","All six together. All-inclusive at the hotel, or book somewhere in Bugibba for a final meal. Luzzu or Trattoria Riccardo have play areas.")
+],
+wed29:[
+C("Morning","time","Pack up & airport","Bolt to Malta airport (about 25 min from Qawra). Allow 2 hours before your flight. Decent duty free and a few cafes. Grab a final pastizzi."),
+C("Flight","time","Fly home","About 3 hours back to the UK. Start planning Japan.")
+]
+};
+
+const BOOKINGS=[
+{text:"Flights UK to Malta (Mon 20 Jul) and Malta to UK (Wed 29 Jul)",extra:"easyJet, Ryanair, KM Malta, BA"},
+{text:"AX Odycy hotel (9 nights, all-inclusive)",extra:"family room + grandma rooms from 23rd",web:"https://axhotelsmalta.com/odycy/"},
+{text:"Airport transfer with car seats",extra:"Welcome Pickups or Bolt",web:"https://www.welcomepickups.com/malta/"},
+{text:"Popeye Village tickets (Thu 23rd)",extra:"book online for discount",web:"https://popeyemalta.com"},
+{text:"St John's Co-Cathedral tickets (Wed 22nd)",extra:"slots fill up in summer",web:"https://stjohnscocathedral.com"},
+{text:"Grandmas' day out tour (Sat 25th)",extra:"harbour cruise, private tour, or Three Cities"},
+{text:"Malta National Aquarium tickets",web:"https://www.aquarium.com.mt"},
+{text:"Gozo ferry \u2014 no booking needed, pay on return"},
+{text:"Simon + Hannah dinner #1 (Fri 24th)",extra:"Minoa rooftop, Ta' Marija Mosta, or Bugibba"},
+{text:"Simon + Hannah dinner #2 (Sun 26th)",extra:"de Mondion Mdina, Gululu St Julian's, or Valletta"},
+{text:"Hannah + Sue dinner (Mon 27th)",extra:"Minoa rooftop, Valletta, or Sliema"},
+{text:"Simon + Jennifer lunch (Tue 28th)",extra:"Cheeky Monkey or Bugibba waterfront"}
+];
+
+const PACKING=[
+{cat:"Sun protection (non-negotiable)",items:["High factor sun cream SPF50","Sun hats for everyone","Sunglasses for everyone","UV rash vests for the kids","After-sun lotion"]},
+{cat:"Swimwear & beach",items:["Multiple swimsuits (you'll want dry ones each day)","Water shoes (rocky beaches and sea entries)","Snorkels and masks","Inflatable armbands / swim aids for the 4-year-old","Beach towels or microfibre travel towels","Bucket and spade","Reusable water bottles","Cool bag for beach day at Ramla Bay"]},
+{cat:"Clothes",items:["Light cotton t-shirts and shorts","A couple of light long-sleeve tops (evening mosquitoes, AC)","Sandals and flip flops","One pair of trainers/walking shoes for Valletta, Mdina, temples","Light evening clothes for restaurants and date nights","Light cardigan for air-conditioned places"]},
+{cat:"Heat management",items:["Portable fan or handheld misting fan","Spray bottle to mist water","Small umbrella for shade (almost none at outdoor sites)"]},
+{cat:"Currency & practicalities",items:["Euros (Malta uses the Euro)","Most places take card but cash useful for boats, kiosks, tips","Bolt app installed and working","Malta uses UK 3-pin plugs \u2014 no adaptor needed from UK"]},
+{cat:"Essentials",items:["First aid kit (plasters, Calpol, antihistamine, Imodium)","Insect repellent (mosquitoes in the evening)","Baby wipes","Phone chargers and portable battery","Camera or make sure phones have space"]},
+{cat:"Nice to have",items:["Underwater phone case for snorkelling photos","Jellyfish sting treatment (white vinegar)","Binoculars for boat trips and clifftop walks"]}
+];
+
+const PHOTO_SPOTS=[
+{name:"Upper Barrakka Gardens",day:"Wed 22",desc:"Grand Harbour panorama.",lat:35.8946,lng:14.5128},
+{name:"Birgu waterfront",day:"Wed 22",desc:"Colourful luzzu boats with Valletta behind.",lat:35.8880,lng:14.5222},
+{name:"Popeye Village",day:"Thu 23",desc:"Film set on Anchor Bay.",lat:35.9611,lng:14.3431},
+{name:"\u0120gantija Temples",day:"Sun 26",desc:"5,500-year-old megalithic temples.",lat:36.0475,lng:14.2689},
+{name:"The Citadel, Victoria",day:"Sun 26",desc:"360\u00b0 views over Gozo.",lat:36.0460,lng:14.2394},
+{name:"Ramla Bay (Tal-Mixta Cave)",day:"Sun 26",desc:"Orange beach framed by cave.",lat:36.0619,lng:14.2819},
+{name:"Blue Grotto",day:"Mon 27",desc:"Electric blue sea caves.",lat:35.8233,lng:14.4547},
+{name:"Marsaxlokk harbour",day:"Mon 27",desc:"Colourful painted luzzu boats.",lat:35.8414,lng:14.5436}
+];
+
+
+// --- Countdown ---
+(function(){
+  const s=new Date(TRIP_START+"T00:00:00"),e=new Date(TRIP_END+"T23:59:59"),el=document.getElementById("countdown");
+  function u(){const n=new Date();if(n>=s&&n<=e){el.textContent="You're on this trip right now! \ud83c\uddf2\ud83c\uddf9";el.style.color="#B85C3A";return;}if(n>e){el.textContent="Trip complete \u2713";el.style.color="#999";return;}const d=Math.ceil((s-n)/(864e5));el.textContent=d+" day"+(d===1?"":"s")+" to go!";}
+  u();setInterval(u,6e4);
+})();
+
+// --- State & Nav ---
+let active="mon20";
+const nav=document.getElementById("nav");
+const content=document.getElementById("content");
+
+function renderNav(){
+  nav.innerHTML=TABS.map(t=>`<button class="${t.id===active?'active':''}" data-id="${t.id}">${t.label}</button>`).join("");
+  nav.querySelectorAll("button").forEach(b=>b.onclick=()=>{active=b.dataset.id;renderNav();render();window.scrollTo(0,0);});
+}
+
+// --- Card rendering ---
+const mapIcon='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>';
+
+function renderCard(c){
+  const badgeCls={time:"b-time",ferry:"b-ferry",photo:"b-photo",date:"b-date",dashed:"b-time"}[c.type]||"b-time";
+  const cardCls=c.type==="photo"?"photo":c.type==="dashed"?"dashed":c.type==="date"?"date-card":"";
+  const paras=c.desc?c.desc.split("\n\n").map(p=>`<p>${p}</p>`).join(""):"";
+  let links="";
+  if(c.maps) links+=`<a class="btn btn-map" href="${c.maps}" target="_blank" rel="noopener">${mapIcon} ${c.ml||"Map"}</a>`;
+  if(c.web) links+=`<a class="btn btn-web" href="${c.web}" target="_blank" rel="noopener">${c.wl||"Website"}</a>`;
+  return `<div class="card ${cardCls}"><span class="badge ${badgeCls}">${c.time}</span><h3>${c.title}</h3>${paras}${links?'<div class="links">'+links+'</div>':''}</div>`;
+}
+
+// --- Main render ---
+function render(){
+  const d=DAYS[active];
+  if(!d){content.innerHTML="";return;}
+  let h=`<div class="day-head"><div class="day-label">${d.dayLabel}</div><div class="day-title">${d.title}</div>${d.sub?'<div class="day-drive">'+d.sub+'</div>':''}</div>`;
+
+  if(active==="bookings"){
+    h+=`<div class="list-card">`;
+    h+=BOOKINGS.map(b=>{
+      let extra=b.extra?`<div class="extra">${b.extra}</div>`:"";
+      let link=b.web?`<div class="links" style="margin-top:4px"><a class="btn btn-web" href="${b.web}" target="_blank" rel="noopener">Website</a></div>`:"";
+      return `<div class="booking-row"><span class="status" style="color:#B85C3A">!</span><div class="info">${b.text}${extra}${link}</div></div>`;
+    }).join("");
+    h+=`</div>`;
+  }
+  else if(active==="packing"){
+    PACKING.forEach(cat=>{
+      h+=`<div class="list-card"><h3>${cat.cat}</h3>`;
+      cat.items.forEach(i=>{h+=`<div class="list-item"><span class="dot">\u25cb</span><span>${i}</span></div>`;});
+      h+=`</div>`;
+    });
+  }
+  else if(active==="photos"){
+    PHOTO_SPOTS.forEach((s,i)=>{
+      h+=`<div class="card photo"><span class="badge b-photo">${s.day} \u00b7 Spot ${i+1}</span><h3>${s.name}</h3><p>${s.desc}</p><div class="links"><a class="btn btn-map" href="https://www.google.com/maps/search/${encodeURIComponent(s.name+' Malta')}" target="_blank" rel="noopener">${mapIcon} Open in Maps</a></div></div>`;
+    });
+  }
+  else if(active==="weather"){
+    h+=`<div id="wx" class="weather-card" style="text-align:center;padding:24px;color:#888">Loading forecast...</div>`;
+    setTimeout(loadWeather,50);
+  }
+  else{
+    (ITEMS[active]||[]).forEach(c=>{h+=renderCard(c);});
+  }
+  content.innerHTML=h;
+}
+
+// --- Weather ---
+const WMO={0:"\u2600\ufe0f Clear",1:"\ud83c\udf24 Mostly clear",2:"\u26c5 Partly cloudy",3:"\u2601\ufe0f Overcast",45:"\ud83c\udf2b Foggy",51:"\ud83c\udf26 Light drizzle",61:"\ud83c\udf27 Light rain",63:"\ud83c\udf27 Rain",80:"\ud83c\udf26 Showers",95:"\u26c8 Thunderstorm"};
+
+async function loadWeather(){
+  const el=document.getElementById("wx");
+  if(!el)return;
+  const now=new Date(),start=new Date(TRIP_START+"T00:00:00");
+  const diff=Math.ceil((start-now)/864e5);
+  if(diff>16){
+    el.innerHTML=`<div style="font-size:36px;margin-bottom:8px">\u2600\ufe0f</div><h3 style="margin-bottom:6px">Forecast not available yet</h3><p>Open-Meteo provides forecasts up to 16 days ahead. Check back closer to the trip.</p><div style="margin-top:16px;padding:16px;background:#F9F8F6;border-radius:10px;text-align:left"><h3 style="font-size:14px;margin-bottom:8px">What to expect in July</h3><p style="font-size:13px;color:#666">Highs 32-35\u00b0C, lows 23-25\u00b0C. Relentless sunshine, virtually no rain. Sea 25-26\u00b0C. Extreme UV. Plan indoor activities for 1-4pm.</p></div>`;
+    el.style.textAlign="center";
+    return;
+  }
+  try{
+    const url=`https://api.open-meteo.com/v1/forecast?latitude=35.95&longitude=14.42&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_probability_max&start_date=${TRIP_START}&end_date=${TRIP_END}&timezone=Europe/Malta`;
+    const res=await fetch(url);
+    const data=await res.json();
+    if(!data.daily){el.innerHTML="Could not load forecast.";return;}
+    const dn=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+    let rows="";
+    data.daily.time.forEach((t,i)=>{
+      const dt=new Date(t+"T12:00:00");
+      const day=dn[dt.getDay()]+" "+dt.getDate();
+      const wx=WMO[data.daily.weathercode[i]]||"?";
+      const hi=Math.round(data.daily.temperature_2m_max[i]);
+      const lo=Math.round(data.daily.temperature_2m_min[i]);
+      const rain=data.daily.precipitation_probability_max[i]||0;
+      rows+=`<div class="weather-day"><span class="wd-date">${day}</span><span class="wd-icon">${wx}${rain>0?' \u00b7 '+rain+'% rain':''}</span><span class="wd-temps"><span class="wd-hi">${hi}\u00b0</span> / <span class="wd-lo">${lo}\u00b0</span></span></div>`;
+    });
+    el.innerHTML=`<span class="badge b-time">Qawra / St Paul's Bay</span>${rows}`;
+    el.style.textAlign="left";
+  }catch(e){el.innerHTML="Could not load forecast. Check your connection.";}
+}
+
+// --- Init ---
+renderNav();
+render();
+
+</script>
+</body>
+</html>
